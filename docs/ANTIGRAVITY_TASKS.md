@@ -325,7 +325,7 @@ results are internal only. See `REPRO_LOG.md`, "Data provenance".
    yaw-only canonicaliser cannot repair a tilt, so the gain there may be smaller than prediction 3
    expects. If that happens, say so - it bounds what the fix claims to do.
 
-## [~] A10 - Backbone ablation (started 2026-11-12)
+## [x] A10 - Backbone ablation - DONE 2026-11-12 (prediction 1 confirmed, 2 refuted, 3 unsupported; RN101 reproduction misses - check its channel width)
 
 ModelNet40 yaw sweep, published protocol, for RN50, RN101 and ViT-B/32 (ViT-B/16 is run 5). Each backbone
 has its own searched prompts and view weights in `best_param.py`, and all four were searched against the

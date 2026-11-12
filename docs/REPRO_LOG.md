@@ -226,6 +226,46 @@ fully repair it even if there were something to repair; and both ScanObjectNN sp
 
 **Licence caveat stands: none of A9 may be reported until the official registration is done.**
 
+| 17 | 2026-11-12 | A10 | ModelNet40 yaw sweep, published protocol, **RN50 / RN101 / ViT-B/32** | `configs/yaw_sweep_modelnet40_{rn50,rn101,vit_b32}.yaml` | 0 | table below | three more reproduction points; prediction 1 confirmed, 2 refuted, 3 not supported |
+
+### A10: the backbone ablation
+
+| backbone | measured at 0 deg | published | spread | relative spread | on-grid | off-grid | gap |
+|---|---|---|---|---|---|---|---|
+| RN50 | 39.26% [37.36, 41.17] | 39.38 | 6.40 | 16.3% | 38.49 | 33.63 | **+4.86** |
+| RN101 | 44.04% [42.10, 45.95] | 46.31 | 2.92 | 6.6% | 44.20 | 42.81 | **+1.38** |
+| ViT-B/32 | 54.86% [52.88, 56.85] | 55.14 | 4.98 | 9.1% | 53.70 | 50.63 | **+3.07** |
+| ViT-B/16 | 63.61% [61.71, 65.52] | 64.26 | 9.16 | 14.4% | 61.40 | 55.47 | **+5.93** |
+
+(on-grid = angles that are multiples of 90; off-grid = the rest.)
+
+**Reproduction: three of four inside the interval.** RN50, ViT-B/32 and ViT-B/16 all contain their
+published figure. **RN101 does not**: 46.31 lies above our [42.10, 45.95]. That is a genuine, unexplained
+2.3-point shortfall and must be reported as one rather than rounded away. Candidate explanations, none
+tested: the channel width for RN101 in our pipeline (512) may be wrong - check `clip.build_model`'s output
+dimension for that backbone before anything else - or its shipped prompt set may assume something our path
+does not reproduce. **This is the first thing to check if there is time**; if it is a channel-width bug it
+would invalidate the RN101 row only.
+
+**Prediction 1 - confirmed, and it was the one that mattered.** Every backbone shows the on-grid advantage:
++4.86, +1.38, +3.07, +5.93 points. The sawtooth is not a quirk of ViT-B/16. Since all four backbones have
+*different* searched prompts but share the projection geometry and the canonical-pose data they were
+searched against, a flat backbone would have undermined the explanation. None is flat.
+
+**Prediction 2 - refuted.** I predicted absolute spread would scale with accuracy. It does not: RN50 is the
+weakest backbone (39.26%) yet has a larger spread (6.40) than both RN101 (2.92) and ViT-B/32 (4.98).
+Accuracy does not determine pose sensitivity.
+
+**Prediction 3 - not supported.** Relative spread ranges from 6.6% to 16.3%, a factor of 2.5, so the
+sensitivity is not a constant property of the shared pipeline either.
+
+**What 2 and 3 together mean.** Pose sensitivity varies per backbone in a way that neither accuracy nor the
+shared geometry explains. The remaining candidate, consistent with everything else in this project, is the
+**prompt set**: each backbone has its own, and they differ in how strongly they describe the canonical
+appearance. RN101's prompts give the flattest curve and also the worst reproduction, which is suggestive
+but not evidence. Testing it would mean running one backbone's prompts through another backbone - a clean
+experiment, not yet run, and a good "unresolved question" for the report.
+
 | 4 | 2026-11-12 | - | ModelNet40, first 64 objects only | `configs/smoke_modelnet40.yaml` | 0 | 56.25% - **not reportable** | Smoke test of the harness. The test split is ordered by class, so the first 64 objects are not a sample of anything |
 
 Columns to fill without exception: the script and config that produced it, the repo commit it ran at, the
