@@ -1,0 +1,25 @@
+# data and checkpoints - never committed, see SETUP.md for how to fetch them
+data/
+third_party/
+*.pth
+*.pt
+*.ckpt
+*.zip
+*.tar.gz
+*.pcd
+*.bag
+*.db3
+
+# python
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# results: keep the small tables and figures, not the raw dumps
+results/**/*.npy
+results/**/raw/
+
+# os
+Thumbs.db
+desktop.ini
