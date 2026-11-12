@@ -324,3 +324,22 @@ results are internal only. See `REPRO_LOG.md`, "Data provenance".
 4. **A risk to watch:** PB_T50_RS perturbs about all three axes, not only yaw, and it also rescales. A
    yaw-only canonicaliser cannot repair a tilt, so the gain there may be smaller than prediction 3
    expects. If that happens, say so - it bounds what the fix claims to do.
+
+## [~] A10 - Backbone ablation (started 2026-11-12)
+
+ModelNet40 yaw sweep, published protocol, for RN50, RN101 and ViT-B/32 (ViT-B/16 is run 5). Each backbone
+has its own searched prompts and view weights in `best_param.py`, and all four were searched against the
+same canonically aligned ModelNet40 renders.
+
+Upstream README figures to compare against: RN50 39.38, RN101 46.31, ViT-B/32 55.14, ViT-B/16 64.26.
+
+### Predictions, recorded before the runs
+
+1. **All four backbones show the sawtooth**, with peaks at multiples of 45 degrees. The mechanism is the
+   projection geometry plus prompts fitted to canonical renders, and both are shared across backbones. If
+   one backbone were flat, the explanation would be in trouble.
+2. **The spread should scale roughly with accuracy** - a backbone that cannot classify the canonical view
+   well has less to lose when the view changes. So RN50 should show the smallest absolute spread and
+   ViT-B/16 the largest.
+3. **Less certain:** the *relative* spread (spread divided by accuracy at 0 degrees) may be similar across
+   backbones, if the sensitivity is a property of the shared pipeline rather than of the encoder.
