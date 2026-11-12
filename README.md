@@ -65,3 +65,14 @@ version, seed and exact command.
 ## AI assistance
 
 Disclosed as the course requires, in `../AI_USE.md`.
+
+## Start here
+
+| If you want to... | Read |
+|---|---|
+| know what is left before submission | **`docs/FINISH_LINE.md`** |
+| write the report | `docs/REPORT_DRAFT.md` (sections 1, 3-7 written; 2 and 8 are Anas's) |
+| read the five papers | `docs/LITERATURE.md` |
+| build the slides | `docs/PRESENTATION.md` |
+| check where a number came from | `docs/REPRO_LOG.md` (append-only, 19 runs) |
+| continue this with any AI model | `AGENTS.md`, then `docs/ANTIGRAVITY_TASKS.md` |

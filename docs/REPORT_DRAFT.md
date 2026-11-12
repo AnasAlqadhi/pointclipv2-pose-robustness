@@ -216,13 +216,83 @@ is yaw diversity rather than compute. The ten-pass canonicalisation beats the fo
 angle, and combining them is worse than canonicalisation alone. Under the plain protocol no condition
 improves at any angle, which is correct: there is no pose sensitivity there to repair.
 
-### 7.5 Failure analysis - **to add**
+### 7.5 Failure analysis
 
-The gallery of objects that break, with their rendered views, from `scripts/make_figures.py`.
+Figure `results/figures/failure_gallery.png` renders the three classes that lose most and the two that are
+unaffected, at 0, 30, 60 and 90 degrees. Read it next to the per-class table: it shows *what the model is
+looking at* when a class breaks, which the numbers alone cannot.
+
+### 7.6 Every backbone behaves the same way
+
+| backbone | at 0 deg | published | spread | on-grid minus off-grid |
+|---|---|---|---|---|
+| RN50 | 39.26% [37.36, 41.17] | 39.38 | 6.40 | +4.86 |
+| RN101 | 44.04% [42.10, 45.95] | 46.31 | 2.92 | +1.38 |
+| ViT-B/32 | 54.86% [52.88, 56.85] | 55.14 | 4.98 | +3.07 |
+| ViT-B/16 | 63.61% [61.71, 65.52] | 64.26 | 9.16 | +5.93 |
+
+All four show the on-grid advantage, so the sawtooth is not a ViT-B/16 artefact. Two predictions failed:
+spread does not scale with accuracy (RN50 is the weakest backbone yet swings more than RN101 and
+ViT-B/32), and relative spread is not constant either (6.6% to 16.3%). Neither encoder strength nor the
+shared geometry explains how much pose sensitivity a backbone has; the remaining candidate is its own
+prompt set. Figure: `results/figures/backbones.png`.
+
+### 7.7 The published numbers include an evaluation-time search on the test labels
+
+`trainers/post_search.py` runs, for two passes over the 40 classes, a swap of each of ~1,198 candidate
+prompts, keeping any swap that raises accuracy **on the test labels**. Replicating that search from the
+shipped starting point recovers every published figure:
+
+| backbone | shipped start | after the search | published | gain from the search |
+|---|---|---|---|---|
+| RN50 | 39.18% | **39.38%** | 39.38 | +0.20 |
+| RN101 | 43.80% | **45.99%** | 46.31 | **+2.19** |
+| ViT-B/32 | 54.90% | **55.15%** | 55.14 | +0.24 |
+| ViT-B/16 | 63.74% | **64.18%** | 64.26 | +0.45 |
+
+So the reproduction has no unexplained discrepancy on any backbone, and the size of the test-set tuning is
+measured rather than asserted: 0.2 to 2.2 points at evaluation time, on top of shipped prompts that were
+themselves selected the same way and are worth about 30 points against a plain template (7.1).
+
+Two honest notes. The replication accumulates in float32 while the pipeline runs in half precision, so its
+shipped starting points differ from 7.6 by up to 0.24 points - the two tables must not be mixed without
+saying which is which. And only the prompt search is replicated, not the view-weight search, so the true
+evaluation-time gain is at least what is shown.
+
+### 7.8 ScanObjectNN: the fix does nothing, and that is the expected result
+
+PB_T50_RS reproduces (35.60% [33.90, 37.40] against 35.66). OBJ_ONLY and OBJ_BG fall short of their quoted
+figures (41.65% against 50.09; 37.87% against 41.22), which the code explains: `best_param.py` holds one
+prompt and weight set per dataset and backbone with **no split in the key**, so two of the three splits are
+evaluated with artefacts tuned for the third.
+
+Neither split shows meaningful pose sensitivity (spreads of 2.07 and 2.32 points, and on OBJ_ONLY the
+canonical pose is not even the best angle), and no condition of the fix improves anything on either. That
+matches control C7: the fix repairs a specific pathology and does nothing where the pathology is absent.
+The reason the pathology is absent is itself informative - the single shipped ScanObjectNN prompt set
+matches PB_T50_RS, the split whose objects the dataset's authors **already rotated at random**, so those
+prompts cannot encode a canonical appearance. The factorial reached the same conclusion by removing the
+prompts; this reaches it by changing the pose distribution they were fitted to.
+
+Caveats: cross-split prompt mismatch, PB_T50_RS perturbs all three axes while the canonicaliser corrects
+only yaw, and 581-object splits give intervals about four points wide.
 
 ---
 
 ## 8. Limitations, conclusions, open questions - **ANAS WRITES THIS; raw material below**
+
+Suggested shape, in your own words: one paragraph on what was established, one on what it cost, one on
+what remains open. The three claims that are safe to make, because each has a measurement behind it:
+(i) the published result reproduces exactly once the evaluation-time search is included; (ii) a large part
+of the headline comes from prompts selected on test data, and that part does not survive a change of pose;
+(iii) a yaw canonicalisation costing no extra compute removes the pose dependence, at the price of the
+benchmark's own alignment.
+
+Open questions worth naming, each already specified and not run: run one backbone's prompts through
+another backbone, to test whether the per-backbone differences in 7.6 come from the prompt sets; write
+pose-neutral prompts by hand and check whether accuracy survives rotation better; extend the
+canonicaliser beyond yaw so PB_T50_RS's three-axis perturbation could be addressed; and the robot-collected
+clouds (Track C), which were descoped when the deadline became the binding constraint.
 
 - The fix costs 2.96 points in the canonical pose. Whether that trade is worth making depends on whether
   deployment supplies alignment; for a robot it does not, for this benchmark it does.
