@@ -70,7 +70,8 @@ Disclosed as the course requires, in `../AI_USE.md`.
 
 | If you want to... | Read |
 |---|---|
-| know what is left before submission | **`docs/FINISH_LINE.md`** |
+| continue this work anywhere (the full plan) | **`docs/WORK_PLAN.md`** |
+| know what is left before submission | `docs/FINISH_LINE.md` |
 | write the report | `docs/REPORT_DRAFT.md` (sections 1, 3-7 written; 2 and 8 are Anas's) |
 | read the five papers | `docs/LITERATURE.md` |
 | build the slides | `docs/PRESENTATION.md` |
