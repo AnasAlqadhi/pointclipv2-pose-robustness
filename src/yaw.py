@@ -116,8 +116,22 @@ def extent_yaw(points: np.ndarray, step_deg: float = 5.0, up: int = UP_AXIS) -> 
     return float(angles[best])
 
 
-def yaw_ensemble_angles(n: int, up: int = UP_AXIS) -> np.ndarray:
-    """`n` yaw angles spread evenly over 360 degrees, for the ensembling fix."""
+def yaw_ensemble_angles(n: int, span_deg: float = 360.0, up: int = UP_AXIS) -> np.ndarray:
+    """`n` yaw angles spread evenly over `span_deg`, for the ensembling fix.
+
+    **Do not leave the span at 360 for this projection.** Its ten viewpoints sit
+    at azimuths 0, 45, 90, ... 315 (two groups of four, plus top and bottom), so
+    the view set is closed under a 90-degree turn of the object: rotating by a
+    multiple of 90 degrees re-renders almost the same images in a different
+    order and the ensemble is nearly a no-op. Measured: averaging over
+    [0, 90, 180, 270] changed the logits by at most 4.3 and flipped no
+    predictions at all on a 32-object probe.
+
+    To add views that are genuinely new, spread the offsets across one *tooth*
+    of the grid: span 45 degrees.
+    """
     if n < 1:
         raise ValueError("n must be >= 1")
-    return np.linspace(0.0, 360.0, n, endpoint=False)
+    if span_deg <= 0:
+        raise ValueError("span_deg must be positive")
+    return np.linspace(0.0, span_deg, n, endpoint=False)

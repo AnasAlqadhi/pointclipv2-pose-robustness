@@ -182,6 +182,41 @@ def classify_batch(pipeline: Pipeline, points: torch.Tensor) -> torch.Tensor:
 
 
 @torch.no_grad()
+def logits(
+    pipeline: Pipeline,
+    points: np.ndarray,
+    batch_size: int = 16,
+    transform=None,
+    progress: bool = False,
+) -> np.ndarray:
+    """Class logits per object, [N, num_classes]. `predict` is its argmax.
+
+    Returned rather than only the argmax so that an ensemble can average over
+    several transformed copies of the same object before deciding.
+    """
+    out = None
+    iterator = range(0, len(points), batch_size)
+    if progress:
+        try:
+            from tqdm import tqdm
+
+            iterator = tqdm(iterator, desc="eval", unit="batch")
+        except ImportError:
+            pass
+    for start in iterator:
+        chunk = points[start : start + batch_size]
+        if transform is not None:
+            chunk = np.stack([transform(cloud) for cloud in chunk]).astype(np.float32)
+        batch = torch.from_numpy(np.ascontiguousarray(chunk)).float().cuda()
+        scores = classify_batch(pipeline, batch).float().cpu().numpy()
+        if out is None:
+            out = np.empty((len(points), scores.shape[1]), dtype=np.float32)
+        out[start : start + len(chunk)] = scores
+    assert out is not None
+    return out
+
+
+@torch.no_grad()
 def predict(
     pipeline: Pipeline,
     points: np.ndarray,

@@ -1,0 +1,18 @@
+# C4, C5, C6. Angles cover one full period of the view grid (0 and 90 are peaks,
+# 30 and 60 are troughs), so the fix is tested where the damage is and where it
+# is not. Ensemble offsets span 45 degrees - one tooth of the grid; a 360-degree
+# span is nearly a no-op because the ten viewpoints are closed under a 90-degree
+# turn of the object.
+name: fix_modelnet40_published
+dataset: modelnet40
+data_root: data/modelnet40_ply_hdf5_2048
+split: test
+backbone: ViT-B/16
+protocol: published
+num_points: 1024
+batch_size: 16
+seed: 0
+ensemble_k: 4
+ensemble_span_deg: 45
+angles: [0, 30, 60, 90]
+conditions: [baseline, canon_pca, canon_extent, ens_yaw, ens_jitter, canon_pca_ens]
