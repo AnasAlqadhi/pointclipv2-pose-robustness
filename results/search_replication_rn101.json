@@ -1,0 +1,22 @@
+{
+  "backbone": "RN101",
+  "commit": "8f204d2b0e2b7198864d6b7bdab1d15250b0396a-dirty",
+  "n_objects": 2468,
+  "passes": 2,
+  "shipped_accuracy": 0.4380064904689789,
+  "searched_accuracy": 0.4598865509033203,
+  "gain_points": 2.188006043434143,
+  "prompts_replaced": 15,
+  "pass_history": [
+    0.4436790943145752,
+    0.4598865509033203
+  ],
+  "searched_accuracy_ci": {
+    "value": 0.4598865478119935,
+    "lo": 0.4404376012965964,
+    "hi": 0.4793354943273906,
+    "n": 2468,
+    "confidence": 0.95
+  },
+  "WARNING": "this run tunes on the test labels on purpose, to measure the upstream search; it is not a result of our method"
+}
