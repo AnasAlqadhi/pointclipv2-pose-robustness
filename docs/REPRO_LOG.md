@@ -124,6 +124,25 @@ was refuted, and give this account as the revised explanation - with the caveat 
 the data is consistent with, not one the data proves. A direct test would be to write pose-neutral prompts
 by hand and check whether accuracy survives rotation better; that is the obvious next experiment.
 
+| 12 | 2026-11-12 | A8.2 | ModelNet40, ensemble span sweep, k=4, published protocol | `scripts/run_span_sweep.py configs/span_sweep_modelnet40.yaml` | 0 | at 30 deg: span 11.25 **+1.38** [+0.53, +2.23], 22.5 **+2.92** [+1.94, +3.93], 45 **+2.07**, 90 **+2.31**, 360 **-0.20** [-0.89, +0.49] (no effect). At 0 deg every span is WORSE | prediction half right - see below |
+
+### The span sweep, and a second correction to my own prediction
+
+The prediction was that spans of **90 and 360** would be near no-ops. Only **360** is: its offsets are
+[0, 90, 180, 270], multiples of a quarter turn, and the ten viewpoints are closed under that rotation, so
+the ensemble re-renders the same images. Measured: -0.20 points [-0.89, +0.49] at 30 degrees, i.e. nothing.
+
+Span **90 is not** a no-op (+2.31 at 30 degrees) and I was wrong to predict it would be. With k=4 the
+offsets are spread *within* the span: span 90 gives [0, 22.5, 45, 67.5], which are not multiples of 90 and
+do place views between the grid teeth. The mistake was conflating the span with the step. The correct
+statement is: **an ensemble helps exactly when its offsets are not multiples of 90 degrees**, and the
+sweep supports it - 11.25, 22.5, 45 and 90 all help at a trough; 360, whose offsets are all multiples of
+90, does not.
+
+The best span at 30 degrees is 22.5 (+2.92), slightly better than 45 (+2.07), but no span of the ensemble
+reaches bounding-box canonicalisation (+4.94 at the same angle, at a quarter of the compute). Every span
+is worse than baseline at 0 degrees, which is the same peak-for-flatness trade seen in run 8.
+
 | 4 | 2026-11-12 | - | ModelNet40, first 64 objects only | `configs/smoke_modelnet40.yaml` | 0 | 56.25% - **not reportable** | Smoke test of the harness. The test split is ordered by class, so the first 64 objects are not a sample of anything |
 
 Columns to fill without exception: the script and config that produced it, the repo commit it ran at, the

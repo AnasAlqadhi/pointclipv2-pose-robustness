@@ -1,0 +1,268 @@
+{
+  "name": "span_sweep_modelnet40",
+  "config": {
+    "name": "span_sweep_modelnet40",
+    "dataset": "modelnet40",
+    "data_root": "data/modelnet40_ply_hdf5_2048",
+    "split": "test",
+    "backbone": "ViT-B/16",
+    "protocol": "published",
+    "num_points": 1024,
+    "batch_size": 16,
+    "seed": 0,
+    "ensemble_k": 4,
+    "angles": [
+      0,
+      30
+    ],
+    "spans": [
+      11.25,
+      22.5,
+      45,
+      90,
+      360
+    ]
+  },
+  "commit": "145803a04dc921cde617994db6b1a84da6c36d03",
+  "protocol": "published",
+  "ensemble_k": 4,
+  "n_objects": 2468,
+  "seed": 0,
+  "rows": [
+    {
+      "span_deg": null,
+      "angle_deg": 0.0,
+      "accuracy": {
+        "value": 0.6361426256077796,
+        "lo": 0.6170887358184767,
+        "hi": 0.6551863857374393,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "delta": null
+    },
+    {
+      "span_deg": 11.25,
+      "angle_deg": 0.0,
+      "accuracy": {
+        "value": 0.6081847649918962,
+        "lo": 0.5887358184764991,
+        "hi": 0.6272285251215559,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "delta": {
+        "value": -0.027957860615883307,
+        "lo": -0.03970826580226904,
+        "hi": -0.01661264181523501,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "verdict": "WORSE",
+      "clip_passes_per_object": 40,
+      "seconds": 185.1186050000033
+    },
+    {
+      "span_deg": 22.5,
+      "angle_deg": 0.0,
+      "accuracy": {
+        "value": 0.6012965964343598,
+        "lo": 0.5818476499189628,
+        "hi": 0.6203403565640194,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "delta": {
+        "value": -0.03484602917341977,
+        "lo": -0.04740680713128039,
+        "hi": -0.022690437601296597,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "verdict": "WORSE",
+      "clip_passes_per_object": 40,
+      "seconds": 185.37774519999948
+    },
+    {
+      "span_deg": 45.0,
+      "angle_deg": 0.0,
+      "accuracy": {
+        "value": 0.5911669367909238,
+        "lo": 0.5717179902755267,
+        "hi": 0.6106158833063209,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "delta": {
+        "value": -0.044975688816855756,
+        "lo": -0.05834683954619125,
+        "hi": -0.0320097244732577,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "verdict": "WORSE",
+      "clip_passes_per_object": 40,
+      "seconds": 184.82214179999573
+    },
+    {
+      "span_deg": 90.0,
+      "angle_deg": 0.0,
+      "accuracy": {
+        "value": 0.5976499189627229,
+        "lo": 0.5782009724473258,
+        "hi": 0.61709886547812,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "delta": {
+        "value": -0.038492706645056725,
+        "lo": -0.05145867098865478,
+        "hi": -0.02593192868719611,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "verdict": "WORSE",
+      "clip_passes_per_object": 40,
+      "seconds": 185.0496439999988
+    },
+    {
+      "span_deg": 360.0,
+      "angle_deg": 0.0,
+      "accuracy": {
+        "value": 0.6247974068071313,
+        "lo": 0.6057536466774717,
+        "hi": 0.6438411669367909,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "delta": {
+        "value": -0.011345218800648298,
+        "lo": -0.02025931928687196,
+        "hi": -0.0024311183144246355,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "verdict": "WORSE",
+      "clip_passes_per_object": 40,
+      "seconds": 185.55140549999487
+    },
+    {
+      "span_deg": null,
+      "angle_deg": 30.0,
+      "accuracy": {
+        "value": 0.557131280388979,
+        "lo": 0.5376823338735819,
+        "hi": 0.576580226904376,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "delta": null
+    },
+    {
+      "span_deg": 11.25,
+      "angle_deg": 30.0,
+      "accuracy": {
+        "value": 0.5709076175040518,
+        "lo": 0.5514586709886548,
+        "hi": 0.5907617504051864,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "delta": {
+        "value": 0.013776337115072933,
+        "lo": 0.00526742301458671,
+        "hi": 0.022285251215559156,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "verdict": "better",
+      "clip_passes_per_object": 40,
+      "seconds": 185.48865730000398
+    },
+    {
+      "span_deg": 22.5,
+      "angle_deg": 30.0,
+      "accuracy": {
+        "value": 0.5863047001620746,
+        "lo": 0.5668557536466775,
+        "hi": 0.6057536466774717,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "delta": {
+        "value": 0.029173419773095625,
+        "lo": 0.019448946515397084,
+        "hi": 0.039303079416531606,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "verdict": "better",
+      "clip_passes_per_object": 40,
+      "seconds": 184.89534999999887
+    },
+    {
+      "span_deg": 45.0,
+      "angle_deg": 30.0,
+      "accuracy": {
+        "value": 0.5777957860615883,
+        "lo": 0.5583468395461912,
+        "hi": 0.5972447325769854,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "delta": {
+        "value": 0.020664505672609402,
+        "lo": 0.011750405186385737,
+        "hi": 0.029983792544570502,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "verdict": "better",
+      "clip_passes_per_object": 40,
+      "seconds": 184.6121620000049
+    },
+    {
+      "span_deg": 90.0,
+      "angle_deg": 30.0,
+      "accuracy": {
+        "value": 0.580226904376013,
+        "lo": 0.5607779578606159,
+        "hi": 0.5996758508914101,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "delta": {
+        "value": 0.023095623987034037,
+        "lo": 0.013371150729335495,
+        "hi": 0.03322528363047002,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "verdict": "better",
+      "clip_passes_per_object": 40,
+      "seconds": 184.61692179999955
+    },
+    {
+      "span_deg": 360.0,
+      "angle_deg": 30.0,
+      "accuracy": {
+        "value": 0.5551053484602917,
+        "lo": 0.5352512155591572,
+        "hi": 0.5745542949756888,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "delta": {
+        "value": -0.002025931928687196,
+        "lo": -0.008914100486223663,
+        "hi": 0.004862236628849271,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "verdict": "no",
+      "clip_passes_per_object": 40,
+      "seconds": 184.47931110000354
+    }
+  ],
+  "peak_vram_gb": 1.109403133392334
+}
