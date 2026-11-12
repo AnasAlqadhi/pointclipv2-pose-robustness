@@ -133,7 +133,7 @@ new run.
 
 ---
 
-## [ ] A5 - Yaw sweep (claims C2 and C3)
+## [x] A5 - Yaw sweep (claims C2 and C3) - DONE 2026-11-12
 
 **Goal:** measure how accuracy changes as the input cloud is rotated about the up axis.
 
@@ -152,6 +152,25 @@ results are saved so C3 can be examined.
 
 **Do not:** average over angles and report one number - the shape of the curve *is* the finding. Do not drop
 angles that look odd.
+
+**Result (2026-11-12).** Up axis settled first by rendering (`scripts/check_up_axis.py`,
+`results/figures/up_axis_check.png`): it is **+Y**, not the +Z the code originally assumed.
+
+- published protocol: 0 deg 63.61%, worst 54.46% at 300 deg, **spread 9.16 pts**, paired
+  [+7.58, +10.74]. The curve peaks at 0/90/180/270 - the projection's own view azimuths. On-grid 61.40%
+  vs off-grid 55.47%, non-overlapping;
+- plain protocol: spread only **1.54 pts**. The sensitivity is a property of the test-tuned prompts and
+  view weights, not of the projection;
+- per-class: symmetric +1.84 pts, oriented +6.17 pts - direction right, detail wrong (see `REPRO_LOG.md`,
+  "Reading of runs 5-7"). Do not rewrite the hypothesis to fit.
+
+Figures: `results/figures/yaw_sweep.png`, `results/figures/yaw_per_class.png`.
+
+**What this means for A6.** The mechanism is now known, so the fix has a reason stated before the result:
+if the loss comes from objects falling between fixed views, yaw canonicalisation should move them back onto
+the grid and yaw-spread ensembling should cover the gaps. Also test the fix under **both** protocols - the
+interesting question is whether it recovers the published protocol's lost 9 points, or whether it mostly
+closes the gap that the test-tuned weights opened.
 
 ---
 
@@ -235,6 +254,7 @@ One line per working session, so the next model knows where things stood.
 | Date | Who | Task | What happened |
 |---|---|---|---|
 | 2026-11-12 | Claude Code (Opus) | scaffold | Repo created, folder structure, `src/yaw.py` and `src/metrics.py` with 25 passing tests, docs and these briefs |
+| 2026-11-12 | Claude Code (Opus) | A5 | Up axis settled as +Y by rendering (the code had assumed +Z). Yaw sweep run on both protocols: published loses 9.16 pts and peaks on the view grid, plain varies by 1.54. Per-class C3 partially supported. **Next: A6 (the fix and its controls).** |
 | 2026-11-12 | Claude Code (Opus) | A4 | Harness written and both baselines measured: published protocol 63.61% (reproduces), plain protocol 32.50%. Found the 1024-point truncation that explained an initial 7-point gap. **Next: A5 (yaw sweep). Before the sweep, settle which axis is "up" in these clouds - `src/yaw.py` assumes +Z and that is UNVERIFIED; the upstream views rotate about the first Euler axis, and PointNet's own augmentation rotates about Y. Decide it with rendered images, not by assumption.** |
 | 2026-11-12 | Claude Code (Opus) | A2 | ModelNet40 downloaded and verified (all checks pass); ScanObjectNN came with it but is a second-hand copy needing registration. Data junctioned into the upstream tree. **Next: A4 (baseline harness), and A3 which needs no GPU.** Nothing measured yet |
 | 2026-11-12 | Claude Code (Opus) | A1 | Venv with torch 2.11.0+cu128 working on the 5070; upstream cloned at `17df8a26` and read (`UPSTREAM_NOTES.md`: post-search tunes on test labels; torch-scatter replaceable). A1 done. **Next: A2 (ModelNet40 data), and A3 which needs no GPU.** Nothing measured yet |

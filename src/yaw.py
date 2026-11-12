@@ -14,7 +14,14 @@ from __future__ import annotations
 
 import numpy as np
 
-UP_AXIS = 2  # 0=x, 1=y, 2=z
+# 0=x, 1=y, 2=z. **+Y, established by looking at the renders, not assumed.**
+# scripts/check_up_axis.py rotates a chair, a person, an airplane and a bottle
+# about each candidate axis and renders them: with up=y every object turns while
+# staying upright, while up=x and up=z tip them over. Figure:
+# results/figures/up_axis_check.png. This matches PointNet's own augmentation,
+# which rotates about Y. Changing this invalidates every yaw result, so if it is
+# ever changed, re-run the sweep and log it.
+UP_AXIS = 1
 
 
 def _axes_in_plane(up: int = UP_AXIS) -> tuple[int, int]:

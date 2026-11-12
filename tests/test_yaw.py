@@ -4,6 +4,7 @@ import numpy as np
 import pytest
 
 from src.yaw import (
+    UP_AXIS,
     canonicalise_yaw,
     extent_yaw,
     principal_yaw,
@@ -47,8 +48,16 @@ def test_360_is_identity():
 
 
 def test_rotation_does_not_touch_the_up_axis():
+    """Whichever axis UP_AXIS names, that coordinate must be left alone.
+
+    This used to hard-code column 2 from the old default. The default moved to
+    +Y once the renders settled it, so the assertion now follows UP_AXIS instead
+    of repeating the constant - the property being checked is unchanged.
+    """
     p = _bar()
-    assert np.allclose(rotate_yaw(p, 77.0)[:, 2], p[:, 2])
+    assert np.allclose(rotate_yaw(p, 77.0)[:, UP_AXIS], p[:, UP_AXIS])
+    moved = [a for a in (0, 1, 2) if a != UP_AXIS]
+    assert not np.allclose(rotate_yaw(p, 77.0)[:, moved], p[:, moved])
 
 
 def test_bad_shape_rejected():

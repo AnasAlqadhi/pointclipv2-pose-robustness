@@ -53,6 +53,9 @@ is ViT-B/32, not the ViT-B/16 used for the ModelNet40 headline.
 | 1 | 2026-11-12 | C1 | ModelNet40 test, 2,468 objects, ViT-B/16, **published protocol** (shipped prompts + shipped view weights), 1,024 points | `scripts/run_eval.py configs/baseline_modelnet40_published.yaml` | 0 | **63.61%** [61.71, 65.52], macro 55.81% | **Reproduced.** The published 64.26 (upstream README) / 64.22 (paper) lies inside our interval. 22.6 ms/object, peak 1.11 GB. Deviations: torch_scatter shim; our own evaluation loop instead of `main.py` |
 | 2 | 2026-11-12 | C1 | same, **plain protocol** (one fixed template prompt per class, uniform view weights) | `scripts/run_eval.py configs/baseline_modelnet40_plain.yaml` | 0 | **32.50%** [30.63, 34.36], macro 31.77% | Nothing selected on test data. Roughly **half** the published accuracy |
 | 3 | 2026-11-12 | - | same as run 1 but with all 2,048 points | `configs/baseline_modelnet40_published.yaml` with `num_points: null` | 0 | 57.21% [55.27, 59.16], macro 49.60% | **Kept as the record of a resolved discrepancy.** Our first attempt used all 2,048 points and fell 7 points short. Upstream truncates each cloud to its first 1,024 points (`Dassl3D/dassl/data/data_manager.py:200-201`). With that corrected, run 1 reproduces. The gap was our setup, not the method |
+| 5 | 2026-11-12 | C2, C3 | ModelNet40 test, **yaw sweep** 0-330 deg in 30 deg steps, published protocol, up axis +Y | `scripts/run_yaw_sweep.py configs/yaw_sweep_modelnet40_published.yaml` | 0 | 0 deg **63.61%**, worst 300 deg **54.46%**, **spread 9.16 pts**; canonical 63.61% vs 56.88% mean over the other 11 angles | **C2 confirmed.** Paired 0 deg minus 300 deg = **+9.16 pts [+7.58, +10.74]**, interval excludes zero. On-grid angles (0/90/180/270) **61.40%** [60.43, 62.37] vs off-grid **55.47%** [54.79, 56.17] |
+| 6 | 2026-11-12 | C2 | same sweep, **plain protocol** | `configs/yaw_sweep_modelnet40_plain.yaml` | 0 | 0 deg 32.50%, worst 150 deg 31.04%, **spread 1.54 pts**; canonical 32.50% vs 31.53% mean | **The rotation sensitivity is almost entirely absent here.** On-grid 32.25% vs off-grid 31.29%; paired 0 vs 300 = +1.30 pts [+0.45, +2.19]. Small but not zero |
+| 7 | 2026-11-12 | C3 | per-class drop, published protocol | `scripts/plot_yaw_sweep.py` | 0 | symmetric classes **+1.84 pts** mean drop (n=9), oriented classes **+6.17 pts** (n=31) | **C3 partially supported** - see the honest reading below |
 | 4 | 2026-11-12 | - | ModelNet40, first 64 objects only | `configs/smoke_modelnet40.yaml` | 0 | 56.25% - **not reportable** | Smoke test of the harness. The test split is ordered by class, so the first 64 objects are not a sample of anything |
 
 Columns to fill without exception: the script and config that produced it, the repo commit it ran at, the
@@ -83,6 +86,32 @@ is dropped and the project stands on ModelNet40 plus Track C. That is Anas's cal
 | 2026-11-12 | **Resolved, same day:** the block did not persist. On the next import, in `pytest`, torch loaded, and `torch.cuda.is_available()` is now `True` on the RTX 5070 (capability 12.0, `sm_120` in the arch list, 7.9 GB). So Smart App Control blocked the DLL on its **first** load and allowed it afterwards, which fits a reputation check that had not yet resolved for a freshly downloaded file. **No security setting was changed.** Keeping the row above because it will happen again on any machine that installs these wheels for the first time: if `import torch` fails this way, try it a second time before changing anything. |
 | 2026-11-12 | **Smart App Control blocks the CUDA PyTorch wheels.** The cu128 install succeeded, but `import torch` fails with `OSError: [WinError 4551] An Application Control policy has blocked this file ... torch\lib\shm.dll`. Windows event log, Microsoft-Windows-CodeIntegrity/Operational, events 3033/3077/3118 at 13:27: the DLL "did not meet the Enterprise signing level requirements", policy `{0283ac0f-fff1-49ae-ada1-8a933130cad6}`. `HKLM:\SYSTEM\CurrentControlSet\Control\CI\Policy\VerifiedAndReputablePolicyState = 1`, i.e. Smart App Control is **on**. The CPU wheels from PyPI load fine; the wheels from `download.pytorch.org` do not. This is a signature check, not a path check, so moving the venv will not help. **A1 is blocked on this.** Options in `SETUP.md` section 1a. No security setting was changed. |
 | 2026-11-12 | `pip install -r requirements.txt` pulled **CPU-only torch 2.15.0+cpu** from PyPI as a dependency of `open_clip_torch`, before torch was installed deliberately. A later `pip install torch --index-url .../cu128` then reported "already satisfied" and changed nothing, so the environment looked complete while being CPU-only. Fixed by uninstalling torch and torchvision and reinstalling from the cu128 index. **Check `torch.cuda.is_available()` after any pip command that touches torch.** |
+
+## Reading of runs 5-7, written before the fix is implemented
+
+1. **The curve has four peaks, at 0, 90, 180 and 270 degrees.** Those are exactly the azimuths of the
+   upstream projection's fixed viewpoints. Accuracy recovers when the object's yaw lands on the view grid
+   and sags between the teeth: on-grid 61.40% against off-grid 55.47%, non-overlapping intervals. So the
+   loss is not generic degradation from rotation; it is the object falling between fixed views. That is a
+   mechanism, and it is what motivates the fix.
+2. **Almost all of the sensitivity belongs to the test-tuned protocol, not to the projection.** The same
+   pipeline with a fixed template prompt and uniform view weights varies by only 1.54 points across the
+   whole sweep, against 9.16 points for the published protocol. The per-view weights were selected on
+   canonically aligned test data, so they encode that pose; rotate the object and the weighting is wrong.
+   **This is a second, sharper statement of the post-search problem**: the selected weights do not merely
+   inflate the number, they inflate it in a way that does not survive a change of pose.
+3. **C3 is only partially supported, and the report must say so.** The predicted direction holds in the
+   mean - symmetric classes lose 1.84 points, oriented classes 6.17, a factor of about 3.4. But the detail
+   does not match the simple story: the biggest losers are flat, box-like objects (`keyboard` +30,
+   `glass_box` +30, `mantel` +26, `dresser` +26, `bed` +23), while `chair` and `desk`, which the hypothesis
+   named explicitly, barely move (-2 each). Several classes **improve** under rotation (`xbox` -20,
+   `tent` -14, `sofa` -7, `piano` -6), which a pure "rotation destroys information" account cannot explain.
+   A better account is that the canonical pose is simply the pose the prompts and weights were fitted to,
+   and some classes were fitted badly. Do not quietly rewrite the hypothesis afterwards - report the
+   prediction, the result, and this revision.
+4. The a priori symmetric set is imperfect: `stool` and `lamp` were marked symmetric and lose 13 points
+   each, `tent` was marked symmetric and gains 14. The set was fixed from class names before any result was
+   seen, and it stays as it was. Note the mismatch rather than editing the set.
 
 ## Known limitations to carry into the report
 
