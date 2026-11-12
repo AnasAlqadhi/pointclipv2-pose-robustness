@@ -25,9 +25,10 @@ alignment for free. So:
 | C2 | Accuracy degrades substantially under yaw rotation of the input cloud | **confirmed: 63.61% at 0°, 54.46% at worst, spread 9.16 pts** [+7.58, +10.74] paired. The curve peaks at 0/90/180/270°, the projection's own view azimuths |
 | C2b | That sensitivity belongs to the test-tuned protocol, not to the projection | **confirmed: the plain protocol varies by only 1.54 pts** across the whole sweep |
 | C3 | The degradation is concentrated in orientation-dependent classes, not symmetric ones | **partially supported: +1.84 pts (symmetric) vs +6.17 pts (oriented)**, but several oriented classes *gain* under rotation and `chair`/`desk` barely move. See `docs/REPRO_LOG.md` |
-| C4 | Yaw canonicalisation and/or yaw-ensembled views recover part of the loss | not run |
-| C5 | The gain is not explained by the extra compute alone (same-view-budget control) | not run |
-| C6 | The fix does not harm the canonical, aligned case | not run |
+| C4 | Yaw canonicalisation and/or yaw-ensembled views recover part of the loss | **supported, as a trade:** canonicalisation flattens the sweep (spread 8.14 → **0.16** pts) and raises the mean from 58.69 to **60.66**; +4.94 [+3.32, +6.56] at 30°, +5.11 [+3.48, +6.69] at 60° |
+| C5 | The gain is not explained by the extra compute alone (same-view-budget control) | **passed:** the same-budget jitter ensemble gains nothing (−0.41 at 30°). The 10-pass fix also beats the 40-pass ensemble at every angle |
+| C6 | The fix does not harm the canonical, aligned case | **refuted, and reported as such: −2.96 pts** [−3.93, −2.03] at 0°. Robustness is bought by giving up the benchmark's supplied alignment |
+| C7 | The fix changes nothing where there is no pose sensitivity (negative control) | **confirmed:** under the plain protocol no condition improves at any angle |
 
 Published numbers and measured numbers are kept strictly separate: see `docs/REPRO_LOG.md`.
 

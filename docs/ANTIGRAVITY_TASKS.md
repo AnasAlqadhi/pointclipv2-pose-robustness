@@ -174,7 +174,7 @@ closes the gap that the test-tuned weights opened.
 
 ---
 
-## [ ] A6 - The fix and its controls (claims C4, C5, C6)
+## [x] A6 - The fix and its controls (claims C4, C5, C6) - DONE 2026-11-12
 
 **Goal:** test whether yaw canonicalisation and/or yaw ensembling recovers the loss, with the three controls
 that make the result defensible.

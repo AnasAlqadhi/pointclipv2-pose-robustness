@@ -56,6 +56,43 @@ is ViT-B/32, not the ViT-B/16 used for the ModelNet40 headline.
 | 5 | 2026-11-12 | C2, C3 | ModelNet40 test, **yaw sweep** 0-330 deg in 30 deg steps, published protocol, up axis +Y | `scripts/run_yaw_sweep.py configs/yaw_sweep_modelnet40_published.yaml` | 0 | 0 deg **63.61%**, worst 300 deg **54.46%**, **spread 9.16 pts**; canonical 63.61% vs 56.88% mean over the other 11 angles | **C2 confirmed.** Paired 0 deg minus 300 deg = **+9.16 pts [+7.58, +10.74]**, interval excludes zero. On-grid angles (0/90/180/270) **61.40%** [60.43, 62.37] vs off-grid **55.47%** [54.79, 56.17] |
 | 6 | 2026-11-12 | C2 | same sweep, **plain protocol** | `configs/yaw_sweep_modelnet40_plain.yaml` | 0 | 0 deg 32.50%, worst 150 deg 31.04%, **spread 1.54 pts**; canonical 32.50% vs 31.53% mean | **The rotation sensitivity is almost entirely absent here.** On-grid 32.25% vs off-grid 31.29%; paired 0 vs 300 = +1.30 pts [+0.45, +2.19]. Small but not zero |
 | 7 | 2026-11-12 | C3 | per-class drop, published protocol | `scripts/plot_yaw_sweep.py` | 0 | symmetric classes **+1.84 pts** mean drop (n=9), oriented classes **+6.17 pts** (n=31) | **C3 partially supported** - see the honest reading below |
+| 8 | 2026-11-12 | C4, C5, C6 | ModelNet40, angles 0/30/60/90, six conditions, **published protocol** | `scripts/run_fix.py configs/fix_modelnet40_published.yaml` | 0 | see the table below | **C4 supported, C5 passed, C6 shows a real cost** |
+| 9 | 2026-11-12 | C4, C5 | same, **plain protocol** | `configs/fix_modelnet40_plain.yaml` | 0 | every condition within +-1 pt of baseline; no condition "better" at any angle | **The fix does nothing where there is nothing to fix.** Exactly the right negative control |
+
+### Run 8 in full (published protocol, accuracy %)
+
+| condition | 0 deg | 30 deg | 60 deg | 90 deg | mean | spread | CLIP passes |
+|---|---|---|---|---|---|---|---|
+| baseline | **63.61** | 55.71 | 55.47 | 59.97 | 58.69 | 8.14 | 10 |
+| canonicalise (bbox) | 60.66 | **60.66** | **60.58** | 60.74 | **60.66** | **0.16** | 10 |
+| canonicalise (PCA) | 59.32 | 59.36 | 59.48 | 59.40 | 59.39 | 0.16 | 10 |
+| yaw ensemble k=4, span 45 | 59.12 | 57.78 | 57.94 | 58.83 | 58.42 | 1.34 | 40 |
+| jitter ensemble k=4 (**control**) | 61.47 | 55.31 | 55.71 | 59.24 | 57.93 | 6.16 | 40 |
+| canonicalise + ensemble | 57.90 | 58.06 | 58.06 | 58.31 | 58.08 | 0.41 | 40 |
+
+Paired against the baseline at the same angle: bbox canonicalisation **+4.94** [+3.32, +6.56] at 30 deg and
+**+5.11** [+3.48, +6.69] at 60 deg, but **-2.96** [-3.93, -2.03] at 0 deg.
+
+**What the run says, stated honestly:**
+
+1. **C4 supported, as a trade and not a free win.** Canonicalisation flattens the curve: the spread falls
+   from 8.14 points to 0.16, and the mean over the four angles rises from 58.69 to 60.66. It costs 2.96
+   points at the canonical pose - which is C6 answering in the negative, and must be reported as such. The
+   honest summary is: *the method becomes pose-independent and better on average, by giving up the
+   alignment that the benchmark happens to supply.*
+2. **C5 passed.** The jitter ensemble spends the same 40 forward passes as the yaw ensemble and gains
+   nothing (-0.41 at 30 deg, -2.15 at 0 deg). So the yaw ensemble's gain comes from yaw diversity, not from
+   the extra compute.
+3. **The cheap fix beats the expensive one at every angle.** 10-pass canonicalisation is above 40-pass
+   ensembling everywhere. Four times the compute for a worse result. Combining them is worse than
+   canonicalisation alone, which suggests the ensemble's extra views mostly add noise once the pose is
+   already fixed.
+4. **The bounding-box canonicaliser beats PCA by about 1.3 points everywhere.** Keeping two canonicalisers
+   as an ablation was worth it: reporting only PCA would have understated the fix.
+5. **Run 9 is the control that matters most for honesty.** Under the plain protocol, which the yaw sweep
+   showed is already pose-flat, no condition improves anything at any angle. A fix that "helped" there
+   would have meant the gain was an artefact of the procedure rather than a repair of the pathology.
+
 | 4 | 2026-11-12 | - | ModelNet40, first 64 objects only | `configs/smoke_modelnet40.yaml` | 0 | 56.25% - **not reportable** | Smoke test of the harness. The test split is ordered by class, so the first 64 objects are not a sample of anything |
 
 Columns to fill without exception: the script and config that produced it, the repo commit it ran at, the
