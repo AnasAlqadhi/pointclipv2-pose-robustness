@@ -1,0 +1,172 @@
+{
+  "name": "baseline_scanobjectnn_pb_t50_rs",
+  "config_path": "configs/baseline_scanobjectnn_pb_t50_rs.yaml",
+  "config": {
+    "name": "baseline_scanobjectnn_pb_t50_rs",
+    "dataset": "scanobjectnn",
+    "data_root": "data/scanobjectnn",
+    "split": "pb_t50_rs",
+    "backbone": "ViT-B/16",
+    "protocol": "published",
+    "num_points": 1024,
+    "batch_size": 16,
+    "seed": 0
+  },
+  "commit": "febf9c664a07f60ed3cab635b090724159805a3c-dirty",
+  "transform": "none",
+  "protocol": "published",
+  "prompts": [
+    "The depth map of the bag is dark, shadowy, and mysterious.",
+    "This is a monochrome depth map of a bin.",
+    "This is a 3D model of a box with an obscure depth map.",
+    "A side view depth map of a cabinet might look like a rectangle with a few smaller rectangles inside of it.",
+    "The chair would be a light gray color on the grayscale map.",
+    "The desk would appear as a rectangle on the grayscale map.",
+    "This is a depth map of a display in grayscale or white.",
+    "A side view depth map of a door would look like a rectangle with a line down the middle.",
+    "A white heightmap in a black background of a shelf would appear as a white relief map on a black background.",
+    "A grayscale or white depth map of a table 3D model would show the table as a white object with varying shades of gray depending on the distance of the table from the viewer.",
+    "A side view depth map of a bed looks like a rectangle with a smaller rectangle on top of it.",
+    "The white heightmap would look like a pillow with a black background.",
+    "This is a depth map of a 3D model of a sink.",
+    "The sofa would be the lightest color on the grayscale map.",
+    "The image would be a white depth map of a 3D model of a toilet."
+  ],
+  "view_weights": [
+    0.75,
+    0.75,
+    0.75,
+    0.5,
+    0.5,
+    1.0,
+    0.75,
+    1.0,
+    0.25,
+    0.25
+  ],
+  "num_views": 10,
+  "forward_passes_per_object": 10,
+  "torch_scatter_shim": true,
+  "n_objects": 2882,
+  "limit": null,
+  "seed": 0,
+  "accuracy": {
+    "value": 0.3560027758501041,
+    "lo": 0.339000693962526,
+    "hi": 0.37404580152671757,
+    "n": 2882,
+    "confidence": 0.95
+  },
+  "macro_accuracy": 0.29640837574946327,
+  "per_class_accuracy": {
+    "bag": {
+      "value": 0.30120481927710846,
+      "lo": 0.20481927710843373,
+      "hi": 0.39759036144578314,
+      "n": 83,
+      "confidence": 0.95
+    },
+    "bin": {
+      "value": 0.22613065326633167,
+      "lo": 0.1708542713567839,
+      "hi": 0.2864321608040201,
+      "n": 199,
+      "confidence": 0.95
+    },
+    "box": {
+      "value": 0.15037593984962405,
+      "lo": 0.09022556390977443,
+      "hi": 0.21052631578947367,
+      "n": 133,
+      "confidence": 0.95
+    },
+    "cabinet": {
+      "value": 0.3951612903225806,
+      "lo": 0.3467741935483871,
+      "hi": 0.4435483870967742,
+      "n": 372,
+      "confidence": 0.95
+    },
+    "chair": {
+      "value": 0.8025641025641026,
+      "lo": 0.764102564102564,
+      "hi": 0.841025641025641,
+      "n": 390,
+      "confidence": 0.95
+    },
+    "desk": {
+      "value": 0.04666666666666667,
+      "lo": 0.013333333333333334,
+      "hi": 0.08,
+      "n": 150,
+      "confidence": 0.95
+    },
+    "display": {
+      "value": 0.058823529411764705,
+      "lo": 0.029411764705882353,
+      "hi": 0.09313725490196079,
+      "n": 204,
+      "confidence": 0.95
+    },
+    "door": {
+      "value": 0.8047619047619048,
+      "lo": 0.7522619047619058,
+      "hi": 0.8571428571428571,
+      "n": 210,
+      "confidence": 0.95
+    },
+    "shelf": {
+      "value": 0.18672199170124482,
+      "lo": 0.13692946058091288,
+      "hi": 0.23651452282157676,
+      "n": 241,
+      "confidence": 0.95
+    },
+    "table": {
+      "value": 0.21481481481481482,
+      "lo": 0.16666666666666666,
+      "hi": 0.26296296296296295,
+      "n": 270,
+      "confidence": 0.95
+    },
+    "bed": {
+      "value": 0.14545454545454545,
+      "lo": 0.08181818181818182,
+      "hi": 0.21818181818181817,
+      "n": 110,
+      "confidence": 0.95
+    },
+    "pillow": {
+      "value": 0.47619047619047616,
+      "lo": 0.38095238095238093,
+      "hi": 0.5714285714285714,
+      "n": 105,
+      "confidence": 0.95
+    },
+    "sink": {
+      "value": 0.06666666666666667,
+      "lo": 0.025,
+      "hi": 0.11666666666666667,
+      "n": 120,
+      "confidence": 0.95
+    },
+    "sofa": {
+      "value": 0.5,
+      "lo": 0.43333333333333335,
+      "hi": 0.5666666666666667,
+      "n": 210,
+      "confidence": 0.95
+    },
+    "toilet": {
+      "value": 0.07058823529411765,
+      "lo": 0.023529411764705882,
+      "hi": 0.12941176470588237,
+      "n": 85,
+      "confidence": 0.95
+    }
+  },
+  "eval_seconds": 54.51648489999934,
+  "ms_per_object": 18.91619878556535,
+  "peak_vram_gb": 1.1091647148132324,
+  "pipeline_load_seconds": 8.965769100002944
+}

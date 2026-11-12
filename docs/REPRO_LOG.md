@@ -168,6 +168,26 @@ This is the third independent route to the same conclusion - the coarse sweep's 
 no-op at offsets that are multiples of 90, and now the tooth spacing - so the mechanism does not rest on
 one measurement.
 
+| 14 | 2026-11-12 | A9 | **ScanObjectNN**, published protocol, ViT-B/16, three test splits | `scripts/run_eval.py configs/baseline_scanobjectnn_*.yaml` | 0 | **PB_T50_RS 35.60%** [33.90, 37.40] (n=2882) · **OBJ_ONLY 41.65%** [37.69, 45.61] (n=581) · **OBJ_BG 37.87%** [34.08, 41.82] (n=581) | see below. **Licence caveat applies: not reportable until Anas registers officially** |
+
+### What the ScanObjectNN baselines say
+
+**PB_T50_RS reproduces.** 35.60% against the upstream README's ScanObjectNN figure of 35.66 for ViT-B/16,
+and the 35.36 quoted by secondary sources. So the single number the upstream README reports for
+"ScanObjectNN" is almost certainly the PB_T50_RS split.
+
+**The other two splits do not match the quoted numbers**, and the gap is instructive rather than a failure:
+OBJ_ONLY measured 41.65% against a quoted 50.09, OBJ_BG 37.87% against 41.22. Note what the code does -
+`trainers/best_param.py` holds **one** set of prompts and view weights per dataset and backbone, keyed
+`scanobjectnn_vit_b16_*`, with no split in the key. Those were selected on one split's labels; applied to
+the other two they transfer poorly.
+
+That is the same finding as on ModelNet40, arriving from a different direction: the tuned artefacts are
+fitted to the exact evaluation condition they were searched on, and they degrade when that condition
+changes - whether the change is the object's pose or the dataset split. Before putting this in the report,
+verify the quoted split-level numbers against the paper's own table (task A3), because the 50.09 and 41.22
+figures come from secondary sources that already disagree with each other.
+
 | 4 | 2026-11-12 | - | ModelNet40, first 64 objects only | `configs/smoke_modelnet40.yaml` | 0 | 56.25% - **not reportable** | Smoke test of the harness. The test split is ordered by class, so the first 64 objects are not a sample of anything |
 
 Columns to fill without exception: the script and config that produced it, the repo commit it ran at, the

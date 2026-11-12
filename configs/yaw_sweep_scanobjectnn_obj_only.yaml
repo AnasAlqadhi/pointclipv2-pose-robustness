@@ -1,0 +1,10 @@
+name: yaw_sweep_scanobjectnn_obj_only
+dataset: scanobjectnn
+data_root: data/scanobjectnn
+split: obj_only
+backbone: ViT-B/16
+protocol: published
+num_points: 1024
+batch_size: 16
+step_deg: 30
+seed: 0

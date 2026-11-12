@@ -1,0 +1,9 @@
+name: baseline_scanobjectnn_obj_bg
+dataset: scanobjectnn
+data_root: data/scanobjectnn
+split: obj_bg
+backbone: ViT-B/16
+protocol: published
+num_points: 1024
+batch_size: 16
+seed: 0

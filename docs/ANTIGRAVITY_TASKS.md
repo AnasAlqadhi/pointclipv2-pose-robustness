@@ -302,3 +302,25 @@ at 0/90/180/270 and at 45/135/225/315, so their union has 45 degree spacing.
 `REPRO_LOG.md`), `third_party/` (a pinned clone, recorded by commit hash) and `.venv/` (rebuildable from
 `SETUP.md`). The GitHub repository is the primary offsite copy and OneDrive is the second. Run the script
 after each batch of results.
+
+## [~] A9 - ScanObjectNN (started 2026-11-12)
+
+**Licence first.** These runs use the second-hand copy that arrived in the upstream authors' Drive folder.
+Anas must register on the official ScanObjectNN site and accept its terms **before any number from these
+runs appears in the submitted report**, and the report must say where the files came from. Until then the
+results are internal only. See `REPRO_LOG.md`, "Data provenance".
+
+### Predictions, recorded before the runs
+
+1. **Reproduction.** The published protocol should land near the upstream README's ViT-B/16 figure of
+   35.66 on ScanObjectNN, and near the split-level numbers quoted by secondary sources (OBJ_BG 41.22,
+   OBJ_ONLY 50.09, PB_T50_RS 35.36) - though those are unverified and may not be what the paper prints.
+2. **Pose sensitivity should appear on OBJ_ONLY**, whose objects are canonically oriented, with the same
+   45-degree tooth structure as ModelNet40.
+3. **The main prediction: canonicalisation should help more on PB_T50_RS than on OBJ_ONLY.** PB_T50_RS is
+   already rotation- and scale-perturbed by the dataset's authors, so its objects arrive in arbitrary
+   poses - exactly the condition the fix was designed for - while OBJ_ONLY arrives aligned and therefore
+   has less to recover.
+4. **A risk to watch:** PB_T50_RS perturbs about all three axes, not only yaw, and it also rescales. A
+   yaw-only canonicaliser cannot repair a tilt, so the gain there may be smaller than prediction 3
+   expects. If that happens, say so - it bounds what the fix claims to do.

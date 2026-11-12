@@ -1,0 +1,10 @@
+name: yaw_sweep_scanobjectnn_pb_t50_rs
+dataset: scanobjectnn
+data_root: data/scanobjectnn
+split: pb_t50_rs
+backbone: ViT-B/16
+protocol: published
+num_points: 1024
+batch_size: 16
+step_deg: 30
+seed: 0
