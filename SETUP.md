@@ -22,6 +22,45 @@ Check it before going further - if this prints `False` or an `sm_120` warning, n
 python -c "import torch; print(torch.__version__, torch.version.cuda, torch.cuda.is_available(), torch.cuda.get_device_name(0))"
 ```
 
+## 1a. If `import torch` fails with WinError 4551
+
+On this laptop it does. **Smart App Control is on** (`VerifiedAndReputablePolicyState = 1`), and it refuses
+to load `torch\lib\shm.dll` from the `download.pytorch.org` wheels because they do not meet its signing
+requirements. The CPU wheels from PyPI load; the CUDA ones do not. It is a signature check, so moving the
+virtual environment to another drive or folder changes nothing.
+
+Three ways out, in the order they are worth trying. Anas decides - one of them is irreversible.
+
+**A. WSL2 with Ubuntu (recommended).** Smart App Control does not apply inside WSL, and the GPU is passed
+through by the Windows driver, which is new enough (621.14). WSL2 is already enabled on this machine; no
+distribution is installed yet. Anas runs, in an **administrator** terminal:
+
+```powershell
+wsl --install -d Ubuntu-24.04
+```
+
+then inside Ubuntu:
+
+```bash
+python3 -m venv ~/pcv2 && source ~/pcv2/bin/activate
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128
+python -c "import torch; print(torch.cuda.is_available(), torch.cuda.get_device_name(0))"
+```
+
+The repository is reachable from Ubuntu at `/mnt/d/Projects/school/...`, so the code does not move. Note that
+file access across `/mnt/d` is slow; keep the datasets inside the Linux filesystem (`~/data`) and only the
+code on `/mnt/d`.
+
+**B. Turn Smart App Control off.** This is Anas's decision alone and **it cannot be undone** - re-enabling
+Smart App Control requires reinstalling Windows. It also lowers protection for everything else on the
+machine, not just this project. Not recommended for a course project.
+
+**C. Run the GPU work on the ZBook.** Ubuntu, so no Application Control. But the Quadro M2000M is Maxwell
+with 4 GB, which current cu128 wheels no longer support - it would need an older torch (cu118) and the
+inference would be slow. Keep this as the fallback if WSL cannot be installed.
+
+Whichever is chosen, it is a deviation from a plain Windows setup: record it in `docs/REPRO_LOG.md`.
+
 Then the rest:
 
 ```powershell

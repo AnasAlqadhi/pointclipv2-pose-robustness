@@ -12,7 +12,7 @@ Status: `[ ]` not started · `[~]` in progress · `[x]` done · `[!]` blocked (s
 
 ---
 
-## [ ] A1 - Environment and upstream code
+## [x] A1 - Environment and upstream code - DONE 2026-11-12
 
 **Goal:** a working venv with CUDA torch, and the upstream repository cloned at a recorded commit.
 
@@ -27,8 +27,21 @@ upstream commit hash is written into the environment table; `pytest tests -q` st
 **Do not:** install a CPU torch build; commit `third_party/`; give up on CUDA and silently continue on CPU -
 if CUDA cannot be made to work, mark this `[!]` and write why.
 
-**Notes:** the 5070 is Blackwell (sm_120), so it needs the cu128 wheels. A plain `pip install torch` gives a
-CPU build. Expect the upstream repo to want older pins; record every substitution you make.
+**Notes (2026-11-12, Claude):** done so far - venv created, non-torch dependencies installed, upstream
+cloned at commit `17df8a269c14cb1601b596b3bc19274964fbd0d9` and read (see `UPSTREAM_NOTES.md`), 25 tests
+passing.
+
+**Result:** `torch 2.11.0+cu128`, `cuda.is_available() == True`, RTX 5070 at capability 12.0, `sm_120`
+supported, 7.9 GB, a GPU matmul and a GPU `scatter_reduce_` both verified. 29 tests pass, 3 skip.
+
+**One trap for anyone repeating this:** the first `import torch` was blocked by Smart App Control
+(`WinError 4551` on `torch\lib\shm.dll`; CodeIntegrity events 3033/3077/3118). It worked on the next
+import - a reputation check that had not yet resolved for freshly downloaded files. **If this happens, try
+again before changing anything, and never turn Smart App Control off to get past it:** that is irreversible
+and is Anas's decision alone, not a model's.
+
+The 5070 is Blackwell (sm_120) and needs cu128 wheels; a plain `pip install torch` gives a CPU build. Expect
+the upstream repo to want older pins; record every substitution you make.
 
 ---
 
@@ -193,4 +206,5 @@ One line per working session, so the next model knows where things stood.
 
 | Date | Who | Task | What happened |
 |---|---|---|---|
-| 2026-11-12 | Claude Code (Opus) | scaffold | Repo created, folder structure, `src/yaw.py` and `src/metrics.py` with 25 passing tests, docs and these briefs. No experiment run, no data downloaded, torch not yet installed in the venv |
+| 2026-11-12 | Claude Code (Opus) | scaffold | Repo created, folder structure, `src/yaw.py` and `src/metrics.py` with 25 passing tests, docs and these briefs |
+| 2026-11-12 | Claude Code (Opus) | A1 | Venv with torch 2.11.0+cu128 working on the 5070; upstream cloned at `17df8a26` and read (`UPSTREAM_NOTES.md`: post-search tunes on test labels; torch-scatter replaceable). A1 done. **Next: A2 (ModelNet40 data), and A3 which needs no GPU.** Nothing measured yet |

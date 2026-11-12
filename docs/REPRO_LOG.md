@@ -13,7 +13,9 @@ If a run was wrong, add a new row saying so and why. Do not remove the old one.
 | OS | Windows 11 Home 10.0.26300 |
 | GPU | NVIDIA GeForce RTX 5070 Laptop, 8151 MiB, driver 621.14, compute capability 12.0 (Blackwell) |
 | Python | 3.12.10 in `project/.venv` |
-| torch | being installed from the cu128 index on 2026-11-12; **the first attempt silently produced a CPU build** (see note below) |
+| torch | **2.11.0+cu128**, CUDA build 12.8, `cuda.is_available() == True`, `sm_120` supported, 7.9 GB usable. Installed from the cu128 index 2026-11-12. Full list in `docs/pip-freeze-dev.txt` |
+| torch-scatter | **not installed.** The pinned `2.0.9` predates this torch and has no matching wheel. The one call that uses it has a native replacement, with equivalence tests in `tests/test_scatter_equivalence.py`. Using it is a deviation and must be stated in the report |
+| tests | 29 passed, 3 skipped (the skips are the `torch_scatter` comparisons, which need that package) |
 | upstream PointCLIP_V2 commit | `17df8a269c14cb1601b596b3bc19274964fbd0d9`, dated 2025-08-12, cloned 2026-11-12 |
 | ModelNet40 version | not yet downloaded |
 | ScanObjectNN version | not yet requested |
@@ -49,6 +51,8 @@ subset of the test set).
 
 | Date | Incident |
 |---|---|
+| 2026-11-12 | **Resolved, same day:** the block did not persist. On the next import, in `pytest`, torch loaded, and `torch.cuda.is_available()` is now `True` on the RTX 5070 (capability 12.0, `sm_120` in the arch list, 7.9 GB). So Smart App Control blocked the DLL on its **first** load and allowed it afterwards, which fits a reputation check that had not yet resolved for a freshly downloaded file. **No security setting was changed.** Keeping the row above because it will happen again on any machine that installs these wheels for the first time: if `import torch` fails this way, try it a second time before changing anything. |
+| 2026-11-12 | **Smart App Control blocks the CUDA PyTorch wheels.** The cu128 install succeeded, but `import torch` fails with `OSError: [WinError 4551] An Application Control policy has blocked this file ... torch\lib\shm.dll`. Windows event log, Microsoft-Windows-CodeIntegrity/Operational, events 3033/3077/3118 at 13:27: the DLL "did not meet the Enterprise signing level requirements", policy `{0283ac0f-fff1-49ae-ada1-8a933130cad6}`. `HKLM:\SYSTEM\CurrentControlSet\Control\CI\Policy\VerifiedAndReputablePolicyState = 1`, i.e. Smart App Control is **on**. The CPU wheels from PyPI load fine; the wheels from `download.pytorch.org` do not. This is a signature check, not a path check, so moving the venv will not help. **A1 is blocked on this.** Options in `SETUP.md` section 1a. No security setting was changed. |
 | 2026-11-12 | `pip install -r requirements.txt` pulled **CPU-only torch 2.15.0+cpu** from PyPI as a dependency of `open_clip_torch`, before torch was installed deliberately. A later `pip install torch --index-url .../cu128` then reported "already satisfied" and changed nothing, so the environment looked complete while being CPU-only. Fixed by uninstalling torch and torchvision and reinstalling from the cu128 index. **Check `torch.cuda.is_available()` after any pip command that touches torch.** |
 
 ## Known limitations to carry into the report
