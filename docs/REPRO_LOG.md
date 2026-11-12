@@ -48,9 +48,12 @@ is ViT-B/32, not the ViT-B/16 used for the ModelNet40 headline.
 
 ## Measured runs
 
-| # | Date | Claim | Dataset / condition | Script + config | Commit | Seed | Result (measured) | Notes / deviations |
-|---|---|---|---|---|---|---|---|---|
-| - | - | - | - | - | - | - | *nothing measured yet* | scaffold only |
+| # | Date | Claim | Dataset / condition | Script + config | Seed | Result (measured) | Notes / deviations |
+|---|---|---|---|---|---|---|---|
+| 1 | 2026-11-12 | C1 | ModelNet40 test, 2,468 objects, ViT-B/16, **published protocol** (shipped prompts + shipped view weights), 1,024 points | `scripts/run_eval.py configs/baseline_modelnet40_published.yaml` | 0 | **63.61%** [61.71, 65.52], macro 55.81% | **Reproduced.** The published 64.26 (upstream README) / 64.22 (paper) lies inside our interval. 22.6 ms/object, peak 1.11 GB. Deviations: torch_scatter shim; our own evaluation loop instead of `main.py` |
+| 2 | 2026-11-12 | C1 | same, **plain protocol** (one fixed template prompt per class, uniform view weights) | `scripts/run_eval.py configs/baseline_modelnet40_plain.yaml` | 0 | **32.50%** [30.63, 34.36], macro 31.77% | Nothing selected on test data. Roughly **half** the published accuracy |
+| 3 | 2026-11-12 | - | same as run 1 but with all 2,048 points | `configs/baseline_modelnet40_published.yaml` with `num_points: null` | 0 | 57.21% [55.27, 59.16], macro 49.60% | **Kept as the record of a resolved discrepancy.** Our first attempt used all 2,048 points and fell 7 points short. Upstream truncates each cloud to its first 1,024 points (`Dassl3D/dassl/data/data_manager.py:200-201`). With that corrected, run 1 reproduces. The gap was our setup, not the method |
+| 4 | 2026-11-12 | - | ModelNet40, first 64 objects only | `configs/smoke_modelnet40.yaml` | 0 | 56.25% - **not reportable** | Smoke test of the harness. The test split is ordered by class, so the first 64 objects are not a sample of anything |
 
 Columns to fill without exception: the script and config that produced it, the repo commit it ran at, the
 seed, and every way the setup differed from the paper (backbone, number of points, views, CUDA version,

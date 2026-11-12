@@ -1,0 +1,12 @@
+# The honest zero-shot protocol: one fixed template prompt per class
+# ("a depth map of a {class}.") and uniform view weights. Nothing selected on
+# test data. This is the baseline every later condition is compared against.
+name: baseline_modelnet40_plain
+dataset: modelnet40
+data_root: data/modelnet40_ply_hdf5_2048
+split: test
+backbone: ViT-B/16
+protocol: plain
+num_points: 1024   # upstream truncates each cloud to its first 1024 points
+batch_size: 16
+seed: 0

@@ -94,7 +94,7 @@ disagree with each other, which is exactly why this task exists.
 
 ---
 
-## [ ] A4 - Baseline evaluation harness (claim C1)
+## [x] A4 - Baseline evaluation harness (claim C1) - DONE 2026-11-12
 
 **Goal:** one script that runs PointCLIP V2 zero-shot classification over a dataset split and writes a
 results table, so that every later experiment is the same code path with a different config.
@@ -115,6 +115,21 @@ exact command, and the per-item predictions are saved under `results/`.
 
 **Do not:** report only the mean; adjust anything to make the number closer to the paper's. If it does not
 match, log the gap and investigate it in a new row - the brief explicitly asks for that.
+
+**Result (2026-11-12):** harness is `src/pcv2.py` + `src/data.py` + `scripts/run_eval.py` + configs. It
+drives the upstream projection and bundled CLIP from our own loop, so a transform can be applied to the
+cloud before projection and per-item predictions are saved for paired statistics.
+
+- published protocol: **63.61%** [61.71, 65.52], macro 55.81% - the published 64.22-64.26 is inside the
+  interval, so C1 reproduces;
+- plain protocol (fixed template prompt, uniform view weights): **32.50%** [30.63, 34.36];
+- 22.6 ms/object, peak 1.11 GB of 7.9 GB, so the full test set takes under a minute. A 12-angle yaw sweep is
+  about 12 minutes. Memory is not a constraint; batch 16 is fine.
+
+**The one thing that cost us 7 points, and that anyone reproducing this must know:** upstream truncates each
+cloud to its **first 1,024 points** (`Dassl3D/dassl/data/data_manager.py:200-201`), while the HDF5 files hold
+2,048. Feeding all 2,048 gives 57.21%. `num_points: 1024` in the configs. Do not change it without logging a
+new run.
 
 ---
 
@@ -220,5 +235,6 @@ One line per working session, so the next model knows where things stood.
 | Date | Who | Task | What happened |
 |---|---|---|---|
 | 2026-11-12 | Claude Code (Opus) | scaffold | Repo created, folder structure, `src/yaw.py` and `src/metrics.py` with 25 passing tests, docs and these briefs |
+| 2026-11-12 | Claude Code (Opus) | A4 | Harness written and both baselines measured: published protocol 63.61% (reproduces), plain protocol 32.50%. Found the 1024-point truncation that explained an initial 7-point gap. **Next: A5 (yaw sweep). Before the sweep, settle which axis is "up" in these clouds - `src/yaw.py` assumes +Z and that is UNVERIFIED; the upstream views rotate about the first Euler axis, and PointNet's own augmentation rotates about Y. Decide it with rendered images, not by assumption.** |
 | 2026-11-12 | Claude Code (Opus) | A2 | ModelNet40 downloaded and verified (all checks pass); ScanObjectNN came with it but is a second-hand copy needing registration. Data junctioned into the upstream tree. **Next: A4 (baseline harness), and A3 which needs no GPU.** Nothing measured yet |
 | 2026-11-12 | Claude Code (Opus) | A1 | Venv with torch 2.11.0+cu128 working on the 5070; upstream cloned at `17df8a26` and read (`UPSTREAM_NOTES.md`: post-search tunes on test labels; torch-scatter replaceable). A1 done. **Next: A2 (ModelNet40 data), and A3 which needs no GPU.** Nothing measured yet |

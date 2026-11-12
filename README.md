@@ -20,7 +20,8 @@ alignment for free. So:
 
 | # | Claim | Status |
 |---|---|---|
-| C1 | PointCLIP V2 reaches 64.22% zero-shot on ModelNet40 (reproduction) | not run |
+| C1 | PointCLIP V2 reaches 64.22% zero-shot on ModelNet40 (reproduction) | **reproduced: 63.61%** [61.71, 65.52] under the published protocol; the published figure is inside our interval |
+| C1b | That figure depends on prompts and view weights selected on the test labels | **confirmed: 32.50%** [30.63, 34.36] with a fixed template prompt and uniform view weights - about half |
 | C2 | Accuracy degrades substantially under yaw rotation of the input cloud | not run |
 | C3 | The degradation is concentrated in orientation-dependent classes, not symmetric ones | not run |
 | C4 | Yaw canonicalisation and/or yaw-ensembled views recover part of the loss | not run |
@@ -28,6 +29,13 @@ alignment for free. So:
 | C6 | The fix does not harm the canonical, aligned case | not run |
 
 Published numbers and measured numbers are kept strictly separate: see `docs/REPRO_LOG.md`.
+
+**Headline so far.** The published protocol reproduces (63.61% against a published 64.22-64.26). But the
+prompts and per-view weights that produce it were selected by maximising accuracy on the test labels, and
+they ship hard-coded in `trainers/best_param.py` under keys literally named `..._test_prompts` and
+`..._test_weights`, so they are used even without the `--post-search` flag. Replace them with one fixed
+template prompt and uniform weights and the same pipeline scores **32.50%**. About half of the headline
+zero-shot result comes from test-set selection. Details: `docs/UPSTREAM_NOTES.md`.
 
 ## Layout
 

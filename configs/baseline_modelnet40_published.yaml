@@ -1,0 +1,12 @@
+# Reproduction of the published protocol: the prompts and per-view weights that
+# ship in trainers/best_param.py, i.e. the ones selected on the test labels.
+# Comparable to the paper's 64.22 / the upstream README's 64.26.
+name: baseline_modelnet40_published
+dataset: modelnet40
+data_root: data/modelnet40_ply_hdf5_2048
+split: test
+backbone: ViT-B/16
+protocol: published
+num_points: 1024   # upstream truncates each cloud to its first 1024 points
+batch_size: 16
+seed: 0
