@@ -258,3 +258,47 @@ One line per working session, so the next model knows where things stood.
 | 2026-11-12 | Claude Code (Opus) | A4 | Harness written and both baselines measured: published protocol 63.61% (reproduces), plain protocol 32.50%. Found the 1024-point truncation that explained an initial 7-point gap. **Next: A5 (yaw sweep). Before the sweep, settle which axis is "up" in these clouds - `src/yaw.py` assumes +Z and that is UNVERIFIED; the upstream views rotate about the first Euler axis, and PointNet's own augmentation rotates about Y. Decide it with rendered images, not by assumption.** |
 | 2026-11-12 | Claude Code (Opus) | A2 | ModelNet40 downloaded and verified (all checks pass); ScanObjectNN came with it but is a second-hand copy needing registration. Data junctioned into the upstream tree. **Next: A4 (baseline harness), and A3 which needs no GPU.** Nothing measured yet |
 | 2026-11-12 | Claude Code (Opus) | A1 | Venv with torch 2.11.0+cu128 working on the 5070; upstream cloned at `17df8a26` and read (`UPSTREAM_NOTES.md`: post-search tunes on test labels; torch-scatter replaceable). A1 done. **Next: A2 (ModelNet40 data), and A3 which needs no GPU.** Nothing measured yet |
+
+---
+
+## [~] A8 - Deeper ablations (queued 2026-11-12, running unattended)
+
+Added because the mechanism found in A5/A6 opens questions nobody has answered. Each is cheap because the
+harness exists. **Predictions are written down before the runs; do not edit them afterwards.**
+
+### A8.1 The 2x2 factorial - which half of the test-set tuning does what?
+`configs/yaw_sweep_modelnet40_prompts_only.yaml` (searched prompts + uniform weights) and
+`..._weights_only.yaml` (template prompt + searched weights) fill the two missing corners; `published` and
+`plain` are the other two.
+
+**Prediction:** the searched **weights** carry the pose sensitivity and the searched **prompts** carry the
+accuracy, because weights are indexed by viewpoint and prompts are not. So `prompts_only` should be
+accurate and comparatively flat across yaw; `weights_only` should be inaccurate and pose-sensitive.
+
+### A8.2 Ensemble span sweep
+`configs/span_sweep_modelnet40.yaml`, k=4, spans 11.25 / 22.5 / 45 / 90 / 360 at angles 0 and 30.
+
+**Prediction:** spans 90 and 360 are near no-ops (the view set is closed under a 90 degree turn of the
+object); small spans help; the benefit is largest at the trough (30) and smallest at the peak (0).
+
+### A8.3 Fine yaw sweep, 5 degree steps
+`configs/yaw_sweep_modelnet40_published_fine.yaml`, 72 angles.
+
+**Prediction:** a sawtooth with teeth every 45 degrees, not 90 - the ten viewpoints are two groups of four,
+at 0/90/180/270 and at 45/135/225/315, so their union has 45 degree spacing.
+
+### Still open, in priority order
+- **ScanObjectNN with a pre-registered prediction**: canonicalisation should help *more* on PB_T50_RS than
+  on OBJ_ONLY, because PB_T50_RS is already rotation-perturbed by its authors. Register the prediction in
+  writing first. The licence step (registering officially) is Anas's, and comes before any reported number.
+- **Backbone ablation**: RN50, RN101, ViT-B/32 and ViT-B/16 all have shipped searched weights. Is the
+  fragility backbone-specific?
+- **R1, the robot clouds** - now a bonus rather than load-bearing, which is where risky work belongs.
+
+## Backups
+
+`scripts/backup.sh` copies results, docs, src, scripts, configs and tests to the OneDrive folder
+`Backups/YZM5110-pointclipv2` (about 1.2 MB). Not copied: `data/` (2.2 GB, re-downloadable and recorded in
+`REPRO_LOG.md`), `third_party/` (a pinned clone, recorded by commit hash) and `.venv/` (rebuildable from
+`SETUP.md`). The GitHub repository is the primary offsite copy and OneDrive is the second. Run the script
+after each batch of results.
