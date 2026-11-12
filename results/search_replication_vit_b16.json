@@ -1,0 +1,22 @@
+{
+  "backbone": "ViT-B/16",
+  "commit": "5f24dbc57744171c0ae120f2a456df9a81e3e105",
+  "n_objects": 2468,
+  "passes": 2,
+  "shipped_accuracy": 0.6373581886291504,
+  "searched_accuracy": 0.6418152451515198,
+  "gain_points": 0.4457056522369385,
+  "prompts_replaced": 9,
+  "pass_history": [
+    0.6418152451515198,
+    0.6418152451515198
+  ],
+  "searched_accuracy_ci": {
+    "value": 0.6418152350081038,
+    "lo": 0.6227714748784441,
+    "hi": 0.660453808752026,
+    "n": 2468,
+    "confidence": 0.95
+  },
+  "WARNING": "this run tunes on the test labels on purpose, to measure the upstream search; it is not a result of our method"
+}

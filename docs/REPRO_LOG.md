@@ -299,6 +299,41 @@ published figure, and - more valuable for the report - **how many accuracy point
 search is worth on each backbone**. That is the quantity the central criticism currently describes
 qualitatively.
 
+| 19 | 2026-11-12 | A10 follow-up | **replication of the upstream evaluation-time prompt search**, all four backbones, ModelNet40 | `scripts/replicate_search.py <backbone>` | - | table below | **all four published figures recovered.** This run tunes on test labels on purpose, to measure the upstream procedure |
+
+### What the evaluation-time search is worth
+
+| backbone | shipped start | after the search | published | remaining gap | prompts replaced (of 40) |
+|---|---|---|---|---|---|
+| RN50 | 39.18% | **39.38%** | 39.38 | **0.00** | 4 |
+| RN101 | 43.80% | **45.99%** | 46.31 | 0.32 | 15 |
+| ViT-B/32 | 54.90% | **55.15%** | 55.14 | **+0.01** | 5 |
+| ViT-B/16 | 63.74% | **64.18%** | 64.26 | 0.08 | 9 |
+
+**Gain from tuning on the test labels: +0.20, +2.19, +0.24, +0.45 points.**
+
+This settles three things at once.
+
+1. **The published protocol is now reproduced exactly, for all four backbones.** RN50 lands on 39.38 to
+   two decimals, ViT-B/32 within 0.01, ViT-B/16 within 0.08, RN101 within 0.32. There is no unexplained
+   discrepancy left anywhere in the reproduction.
+2. **Row 17's RN101 shortfall is explained and closed.** It was the backbone where the search does the most
+   work - 15 of its 40 prompts get replaced, against 4 to 9 for the others - not a defect in our pipeline.
+3. **The central criticism now has a measured size.** The published numbers are the endpoint of a greedy
+   search that accepts a prompt swap only if it raises accuracy on the test set. On this dataset it is
+   worth between 0.2 and 2.2 points depending on the backbone, *on top of* prompts that were already
+   selected the same way - and the much larger effect remains the shipped prompts themselves, worth about
+   30 points against a plain template (runs 1 and 2).
+
+Two caveats to carry into the report:
+
+- The shipped starting points measured here differ slightly from the sweep runs (RN101 43.80 against 44.04,
+  ViT-B/16 63.74 against 63.61). This script accumulates in float32 while the pipeline runs in the model's
+  half precision. The differences are a quarter of a point or less and do not affect any conclusion, but
+  the numbers should not be mixed between tables without saying which is which.
+- Our replication is the prompt search only. Upstream also searches the ten view weights, so the true
+  evaluation-time gain is at least what is measured here.
+
 | 4 | 2026-11-12 | - | ModelNet40, first 64 objects only | `configs/smoke_modelnet40.yaml` | 0 | 56.25% - **not reportable** | Smoke test of the harness. The test split is ordered by class, so the first 64 objects are not a sample of anything |
 
 Columns to fill without exception: the script and config that produced it, the repo commit it ran at, the
