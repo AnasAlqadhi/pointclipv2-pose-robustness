@@ -143,6 +143,31 @@ The best span at 30 degrees is 22.5 (+2.92), slightly better than 45 (+2.07), bu
 reaches bounding-box canonicalisation (+4.94 at the same angle, at a quarter of the compute). Every span
 is worse than baseline at 0 degrees, which is the same peak-for-flatness trade seen in run 8.
 
+| 13 | 2026-11-12 | A8.3 | ModelNet40, yaw sweep at **5 degree steps**, 72 angles, published protocol | `scripts/run_yaw_sweep.py configs/yaw_sweep_modelnet40_published_fine.yaml` | 0 | best 63.61% at 0 deg, worst **53.93% at 295 deg**, spread **9.68 pts**. On a view azimuth (multiples of 45): **60.59%** (n=8); between them: **56.41%** (n=64) | **Prediction confirmed.** Figure: `results/figures/yaw_sweep_fine.png` |
+
+### The fine sweep confirms the mechanism
+
+The prediction was a sawtooth with teeth every **45** degrees, because the eight azimuthal viewpoints are
+two groups of four (0/90/180/270 and 45/135/225/315) whose union is 45-degree spaced. The curve has
+exactly eight teeth and every peak sits on a multiple of 45: the eight highest angles in the whole sweep
+are 0, 180, 225, 90, 45, 270, 135 and 355 degrees.
+
+Folding the curve by candidate periods and measuring the within-bin variance gives 0.44 for a 45-degree
+period against 3.70 for 30 degrees and 3.64 for 120 - about eight times tighter, so the 45-degree
+structure is not an artefact of where the coarse sweep happened to sample.
+
+Two honest qualifications:
+- the peaks are **not equal in height**. 0 degrees (63.61%) and 180 degrees (62.52%) stand above the
+  other six, which is what you would expect if ModelNet40's canonical alignment and the prompts fitted to
+  it add something beyond the view geometry;
+- folding by 90 and 180 degrees also gives low variance, because the view set is closed under a quarter
+  turn and many of these objects are near-symmetric under a half turn. The decisive comparison is 45
+  against 30 and 120, not against its own multiples.
+
+This is the third independent route to the same conclusion - the coarse sweep's peaks, the span sweep's
+no-op at offsets that are multiples of 90, and now the tooth spacing - so the mechanism does not rest on
+one measurement.
+
 | 4 | 2026-11-12 | - | ModelNet40, first 64 objects only | `configs/smoke_modelnet40.yaml` | 0 | 56.25% - **not reportable** | Smoke test of the harness. The test split is ordered by class, so the first 64 objects are not a sample of anything |
 
 Columns to fill without exception: the script and config that produced it, the repo commit it ran at, the

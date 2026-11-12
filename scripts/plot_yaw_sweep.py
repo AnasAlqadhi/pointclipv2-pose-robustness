@@ -185,8 +185,52 @@ def figure_per_class(run: dict, label: str) -> None:
     )
 
 
+def figure_fine(run: dict) -> None:
+    """The 5-degree sweep, with the view azimuths marked.
+
+    The claim this figure has to support is that the teeth sit at multiples of
+    45 degrees - the union of the projection's two groups of four azimuthal
+    views - so the view positions are drawn on the axis and the reader can
+    check the alignment instead of taking it on trust.
+    """
+    angles = np.array([r["angle_deg"] for r in run["angles"]])
+    value = np.array([100 * r["accuracy"]["value"] for r in run["angles"]])
+    lo = np.array([100 * r["accuracy"]["lo"] for r in run["angles"]])
+    hi = np.array([100 * r["accuracy"]["hi"] for r in run["angles"]])
+
+    fig, ax = plt.subplots(figsize=(8.4, 4.2))
+    style(ax)
+    for tick in range(0, 360, 45):
+        ax.axvline(tick, color="#9c9c9c", linewidth=0.9, linestyle=":", zorder=1)
+    ax.fill_between(angles, lo, hi, color="#0072B2", alpha=0.16, linewidth=0)
+    ax.plot(angles, value, color="#0072B2", linewidth=1.8, zorder=3)
+    ax.scatter(angles, value, s=12, color="#0072B2", zorder=4)
+    ax.set_xticks(range(0, 360, 45))
+    ax.set_xlim(-5, 360)
+    ax.set_xlabel("object yaw applied before projection (degrees)", color=MUTED, fontsize=9)
+    ax.set_ylabel("top-1 accuracy (%)", color=MUTED, fontsize=9)
+    ax.set_title(
+        "5-degree yaw sweep, published protocol\n"
+        "dotted lines mark the projection's eight azimuthal viewpoints, every 45 degrees",
+        color=INK,
+        fontsize=10,
+        loc="left",
+    )
+    fig.tight_layout()
+    out = os.path.join(FIGURES, "yaw_sweep_fine.png")
+    fig.savefig(out, dpi=160)
+    print("wrote", out)
+
+    on = value[np.isclose(angles % 45, 0)]
+    off = value[~np.isclose(angles % 45, 0)]
+    print(f"on a view azimuth: {on.mean():.2f}% (n={on.size})   between: {off.mean():.2f}% (n={off.size})")
+
+
 def main() -> int:
     os.makedirs(FIGURES, exist_ok=True)
+    fine = load("yaw_sweep_modelnet40_published_fine")
+    if fine:
+        figure_fine(fine)
     runs = [(run, label, colour) for name, label, colour in SERIES if (run := load(name))]
     if not runs:
         print("no sweep results found - run scripts/run_yaw_sweep.py first")

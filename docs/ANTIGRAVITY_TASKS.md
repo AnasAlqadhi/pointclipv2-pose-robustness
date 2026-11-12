@@ -261,7 +261,7 @@ One line per working session, so the next model knows where things stood.
 
 ---
 
-## [~] A8 - Deeper ablations (queued 2026-11-12, running unattended)
+## [x] A8 - Deeper ablations - DONE 2026-11-12 (A8.1, A8.2, A8.3; ScanObjectNN and backbones still open)
 
 Added because the mechanism found in A5/A6 opens questions nobody has answered. Each is cheap because the
 harness exists. **Predictions are written down before the runs; do not edit them afterwards.**
