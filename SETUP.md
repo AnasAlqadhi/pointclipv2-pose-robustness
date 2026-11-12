@@ -97,9 +97,27 @@ Whichever happens, write it down in `docs/REPRO_LOG.md`. Deviations are required
 
 Nothing goes in git. Put all of it under `data/`.
 
-**ModelNet40** (Track A) - PointCLIP uses the 2,468-object test split of the 1024-point sampled version
-(`modelnet40_normal_resampled` or the `modelnet40_ply_hdf5_2048` variant). Follow the upstream repo's
-`DATASET.md`, since the preprocessing must match or the baseline will not reproduce.
+**ModelNet40** (Track A) - the upstream code wants `modelnet40_ply_hdf5_2048`: HDF5 files listed by
+`train_files.txt` / `test_files.txt`, plus `shape_names.txt`, 2,048 points per object, 2,468 test objects.
+
+The canonical host, `shapenet.cs.stanford.edu`, **is dead** (connection times out, checked 2026-11-12). Do
+not waste time on it. Princeton's `modelnet.cs.princeton.edu/ModelNet40.zip` is up but serves the raw OFF
+meshes, which are a *different* preprocessing and would not reproduce the baseline.
+
+Use the copy the upstream authors themselves publish, so the preprocessing matches theirs exactly:
+
+```powershell
+.\.venv\Scripts\python.exe -m gdown "https://drive.google.com/drive/folders/145flu-CtXPlhJ2nrSUUe7tmUj1DTts7t" -O data\_download
+```
+
+Then verify it before running anything:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\check_modelnet40.py data\modelnet40_ply_hdf5_2048
+```
+
+That script checks the counts, the class names, the label range and the normalisation, and prints the
+per-class test counts. If any check fails, stop - do not run experiments on data that did not verify.
 
 **ScanObjectNN** (Track B) - splits `OBJ_ONLY` and `PB_T50_RS`. Requires an access request on the official
 site. **Do this on Thursday**, because approval is not instant.

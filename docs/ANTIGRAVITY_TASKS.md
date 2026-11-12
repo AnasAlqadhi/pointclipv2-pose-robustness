@@ -45,7 +45,7 @@ the upstream repo to want older pins; record every substitution you make.
 
 ---
 
-## [ ] A2 - ModelNet40 data
+## [x] A2 - ModelNet40 data - DONE 2026-11-12
 
 **Goal:** the ModelNet40 test split in place, preprocessed exactly as the upstream repo expects.
 
@@ -59,6 +59,19 @@ the upstream repo to want older pins; record every substitution you make.
 
 **Do not:** commit anything under `data/`; resample or re-normalise the clouds differently from upstream -
 the preprocessing must match or the baseline will not reproduce, and that difference would be invisible later.
+
+**Result (2026-11-12):** ModelNet40 verified, all checks pass - 40 classes, 2,468 test / 9,840 train, 2,048
+points, unit-sphere normalised. The canonical Stanford host is dead; the data came from the upstream authors'
+Drive folder, which is the preprocessing their numbers were measured on. The split is imbalanced (100 vs 20
+objects per class), so macro accuracy must be reported alongside overall accuracy.
+
+**ScanObjectNN arrived in the same folder** (1.8 GB; OBJ_BG 581, OBJ_ONLY 581, PB_T50_RS 2,882 - counts
+match the literature), so Track B needs no separate download. **But it is a second-hand copy**: the official
+distribution requires registering and accepting terms. Anas must register before any ScanObjectNN number
+goes in the report, and the report must say where the files came from. See `REPRO_LOG.md`.
+
+`project/data` is junctioned into `third_party/PointCLIP_V2/zeroshot_cls/data` so the upstream relative
+paths resolve.
 
 ---
 
@@ -207,4 +220,5 @@ One line per working session, so the next model knows where things stood.
 | Date | Who | Task | What happened |
 |---|---|---|---|
 | 2026-11-12 | Claude Code (Opus) | scaffold | Repo created, folder structure, `src/yaw.py` and `src/metrics.py` with 25 passing tests, docs and these briefs |
+| 2026-11-12 | Claude Code (Opus) | A2 | ModelNet40 downloaded and verified (all checks pass); ScanObjectNN came with it but is a second-hand copy needing registration. Data junctioned into the upstream tree. **Next: A4 (baseline harness), and A3 which needs no GPU.** Nothing measured yet |
 | 2026-11-12 | Claude Code (Opus) | A1 | Venv with torch 2.11.0+cu128 working on the 5070; upstream cloned at `17df8a26` and read (`UPSTREAM_NOTES.md`: post-search tunes on test labels; torch-scatter replaceable). A1 done. **Next: A2 (ModelNet40 data), and A3 which needs no GPU.** Nothing measured yet |
