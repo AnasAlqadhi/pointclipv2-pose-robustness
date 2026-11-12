@@ -188,6 +188,44 @@ changes - whether the change is the object's pose or the dataset split. Before p
 verify the quoted split-level numbers against the paper's own table (task A3), because the 50.09 and 41.22
 figures come from secondary sources that already disagree with each other.
 
+| 15 | 2026-11-12 | A9 | ScanObjectNN yaw sweeps, published protocol | `configs/yaw_sweep_scanobjectnn_{obj_only,pb_t50_rs}.yaml` | 0 | **OBJ_ONLY: spread 2.07 pts**, and 0 deg is *not* the best angle (210 deg is). **PB_T50_RS: spread 2.32 pts**, 0 deg best | no meaningful pose sensitivity on either split |
+| 16 | 2026-11-12 | A9 | ScanObjectNN, six conditions, both splits | `configs/fix_scanobjectnn_*.yaml` | 0 | **no condition improves at any angle on either split.** Largest effect: canon_pca +2.24 [-0.34, +4.82] on OBJ_ONLY at 90 deg, interval includes zero | the fix does nothing here |
+
+### A9: the main prediction was refuted, and the refutation supports the explanation
+
+**Prediction 3, recorded before the runs, was that canonicalisation would help *more* on PB_T50_RS than on
+OBJ_ONLY.** It helps on neither. Every paired comparison on both splits contains zero, except two small
+losses at 0 degrees.
+
+**Prediction 2 was also wrong**: OBJ_ONLY was expected to show ModelNet40-like pose sensitivity. It does
+not - the spread is 2.07 points, and the canonical pose is not even the best angle, with 210 degrees above
+it.
+
+The consistent reading, and it strengthens rather than weakens the project:
+
+1. **There is no pose sensitivity on either ScanObjectNN split to repair.** Both spreads, about 2 points,
+   are the same size as the *plain* protocol's 1.54 on ModelNet40 - the condition where C7 already
+   established that the fix correctly does nothing. So the fix behaving as a no-op here is exactly what
+   the C7 control predicts, not a failure of the fix.
+2. **Why is there no sensitivity? Because of what the prompts were tuned on.** `best_param.py` holds one
+   `scanobjectnn_vit_b16` prompt set, and run 14 showed it matches the PB_T50_RS split - the split whose
+   objects the dataset's authors **already rotated at random**. Prompts selected against randomly posed
+   renders cannot encode a canonical appearance, so they are pose-agnostic, and accuracy barely moves when
+   the object turns. ModelNet40's prompts were selected against canonically aligned renders and are
+   strongly pose-dependent.
+3. That is an independent confirmation of the factorial's revised explanation: **the pose sensitivity
+   lives in the prompts, and tracks the pose distribution they were searched on.** The factorial showed it
+   by removing the prompts; this shows it by changing the pose distribution they were fitted to. The two
+   arrive at the same place from opposite directions.
+
+Caveats to state with it: the prompts/weights key has no split in it, so OBJ_ONLY and OBJ_BG are being
+evaluated with artefacts tuned for a different split (run 14), which depresses their accuracy and may also
+flatten their curves; PB_T50_RS perturbs all three axes and rescales, so a yaw-only canonicaliser could not
+fully repair it even if there were something to repair; and both ScanObjectNN splits are small
+(581 objects), so their intervals are roughly four points wide and only a large effect would be visible.
+
+**Licence caveat stands: none of A9 may be reported until the official registration is done.**
+
 | 4 | 2026-11-12 | - | ModelNet40, first 64 objects only | `configs/smoke_modelnet40.yaml` | 0 | 56.25% - **not reportable** | Smoke test of the harness. The test split is ordered by class, so the first 64 objects are not a sample of anything |
 
 Columns to fill without exception: the script and config that produced it, the repo commit it ran at, the

@@ -1,0 +1,659 @@
+{
+  "name": "fix_scanobjectnn_pb_t50_rs",
+  "config": {
+    "name": "fix_scanobjectnn_pb_t50_rs",
+    "dataset": "scanobjectnn",
+    "data_root": "data/scanobjectnn",
+    "split": "pb_t50_rs",
+    "backbone": "ViT-B/16",
+    "protocol": "published",
+    "num_points": 1024,
+    "batch_size": 16,
+    "seed": 0,
+    "ensemble_k": 4,
+    "ensemble_span_deg": 45,
+    "angles": [
+      0,
+      30,
+      60,
+      90
+    ],
+    "conditions": [
+      "baseline",
+      "canon_pca",
+      "canon_extent",
+      "ens_yaw",
+      "ens_jitter",
+      "canon_pca_ens"
+    ]
+  },
+  "commit": "31e51c3cc8ab63e2a974cbd6ec99d455a00ae5e4-dirty",
+  "up_axis": 1,
+  "protocol": "published",
+  "ensemble_k": 4,
+  "ensemble_span_deg": 45.0,
+  "n_objects": 2882,
+  "seed": 0,
+  "classnames": [
+    "bag",
+    "bin",
+    "box",
+    "cabinet",
+    "chair",
+    "desk",
+    "display",
+    "door",
+    "shelf",
+    "table",
+    "bed",
+    "pillow",
+    "sink",
+    "sofa",
+    "toilet"
+  ],
+  "rows": [
+    {
+      "condition": "baseline",
+      "angle_deg": 0.0,
+      "accuracy": {
+        "value": 0.3560027758501041,
+        "lo": 0.339000693962526,
+        "hi": 0.37404580152671757,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.29640837574946327,
+      "clip_passes_per_object": 10,
+      "seconds": 54.76203650000389,
+      "ms_per_object": 19.001400589869498
+    },
+    {
+      "condition": "baseline",
+      "angle_deg": 30.0,
+      "accuracy": {
+        "value": 0.33518390006939625,
+        "lo": 0.3178348369188064,
+        "hi": 0.3525329632199861,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.27207143815363677,
+      "clip_passes_per_object": 10,
+      "seconds": 53.70578950000345,
+      "ms_per_object": 18.634902671756922
+    },
+    {
+      "condition": "baseline",
+      "angle_deg": 60.0,
+      "accuracy": {
+        "value": 0.3386537126995142,
+        "lo": 0.32199861207494795,
+        "hi": 0.3560027758501041,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.27823514558401,
+      "clip_passes_per_object": 10,
+      "seconds": 53.70214720000513,
+      "ms_per_object": 18.633638861903236
+    },
+    {
+      "condition": "baseline",
+      "angle_deg": 90.0,
+      "accuracy": {
+        "value": 0.34906315058986814,
+        "lo": 0.33171408743927827,
+        "hi": 0.3667591950034698,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.2856083230386023,
+      "clip_passes_per_object": 10,
+      "seconds": 53.832399100007024,
+      "ms_per_object": 18.67883383067558
+    },
+    {
+      "condition": "canon_pca",
+      "angle_deg": 0.0,
+      "accuracy": {
+        "value": 0.34038861901457323,
+        "lo": 0.32338653712699517,
+        "hi": 0.3577376821651631,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.27537035821761136,
+      "clip_passes_per_object": 10,
+      "seconds": 53.88855709999916,
+      "ms_per_object": 18.698319604441068
+    },
+    {
+      "condition": "canon_pca",
+      "angle_deg": 30.0,
+      "accuracy": {
+        "value": 0.3417765440666204,
+        "lo": 0.3247744621790423,
+        "hi": 0.35947258848022207,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.2761511764244065,
+      "clip_passes_per_object": 10,
+      "seconds": 53.86630349999177,
+      "ms_per_object": 18.690598022203947
+    },
+    {
+      "condition": "canon_pca",
+      "angle_deg": 60.0,
+      "accuracy": {
+        "value": 0.34038861901457323,
+        "lo": 0.32338653712699517,
+        "hi": 0.35774635669673827,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.27413594030215405,
+      "clip_passes_per_object": 10,
+      "seconds": 53.920015700001386,
+      "ms_per_object": 18.709235149202424
+    },
+    {
+      "condition": "canon_pca",
+      "angle_deg": 90.0,
+      "accuracy": {
+        "value": 0.3393476752255378,
+        "lo": 0.32234559333795976,
+        "hi": 0.3566967383761277,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.27315066372788255,
+      "clip_passes_per_object": 10,
+      "seconds": 53.94682399999874,
+      "ms_per_object": 18.718537126994704
+    },
+    {
+      "condition": "canon_extent",
+      "angle_deg": 0.0,
+      "accuracy": {
+        "value": 0.34420541290770296,
+        "lo": 0.3275503122831367,
+        "hi": 0.36155447605829283,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.2817868079203157,
+      "clip_passes_per_object": 10,
+      "seconds": 57.28869390000182,
+      "ms_per_object": 19.878103365718882
+    },
+    {
+      "condition": "canon_extent",
+      "angle_deg": 30.0,
+      "accuracy": {
+        "value": 0.3431644691186676,
+        "lo": 0.32650936849410134,
+        "hi": 0.3608605135322693,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.2790033190077945,
+      "clip_passes_per_object": 10,
+      "seconds": 57.68713459999708,
+      "ms_per_object": 20.016354823038544
+    },
+    {
+      "condition": "canon_extent",
+      "angle_deg": 60.0,
+      "accuracy": {
+        "value": 0.34073560027758504,
+        "lo": 0.3240804996530187,
+        "hi": 0.35808466342817485,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.2759664112027212,
+      "clip_passes_per_object": 10,
+      "seconds": 57.29701219999697,
+      "ms_per_object": 19.88098965995731
+    },
+    {
+      "condition": "canon_extent",
+      "angle_deg": 90.0,
+      "accuracy": {
+        "value": 0.3431644691186676,
+        "lo": 0.32650936849410134,
+        "hi": 0.36052220680083263,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.2781880853261123,
+      "clip_passes_per_object": 10,
+      "seconds": 57.880795299992315,
+      "ms_per_object": 20.083551457318638
+    },
+    {
+      "condition": "ens_yaw",
+      "angle_deg": 0.0,
+      "accuracy": {
+        "value": 0.3514920194309507,
+        "lo": 0.33414295628036084,
+        "hi": 0.3691880638445524,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.2894560659753856,
+      "clip_passes_per_object": 40,
+      "seconds": 214.54306050000014,
+      "ms_per_object": 74.4424221027065
+    },
+    {
+      "condition": "ens_yaw",
+      "angle_deg": 30.0,
+      "accuracy": {
+        "value": 0.35079805690492716,
+        "lo": 0.3337959750173491,
+        "hi": 0.3684941013185288,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.28719389536721057,
+      "clip_passes_per_object": 40,
+      "seconds": 214.9327009999979,
+      "ms_per_object": 74.57762005551628
+    },
+    {
+      "condition": "ens_yaw",
+      "angle_deg": 60.0,
+      "accuracy": {
+        "value": 0.34767522553782093,
+        "lo": 0.33067314365024286,
+        "hi": 0.3653712699514226,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.28715246359078084,
+      "clip_passes_per_object": 40,
+      "seconds": 215.5500136999908,
+      "ms_per_object": 74.79181599583303
+    },
+    {
+      "condition": "ens_yaw",
+      "angle_deg": 90.0,
+      "accuracy": {
+        "value": 0.3466342817487856,
+        "lo": 0.3296321998612075,
+        "hi": 0.36398334489937545,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.28262464636227286,
+      "clip_passes_per_object": 40,
+      "seconds": 215.07134759999462,
+      "ms_per_object": 74.62572782789543
+    },
+    {
+      "condition": "ens_jitter",
+      "angle_deg": 0.0,
+      "accuracy": {
+        "value": 0.3417765440666204,
+        "lo": 0.3251214434420541,
+        "hi": 0.35912560721721026,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.28378472215465916,
+      "clip_passes_per_object": 40,
+      "seconds": 214.87307569998666,
+      "ms_per_object": 74.55693119361092
+    },
+    {
+      "condition": "ens_jitter",
+      "angle_deg": 30.0,
+      "accuracy": {
+        "value": 0.3327550312283137,
+        "lo": 0.3157529493407356,
+        "hi": 0.35045107564191535,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.27190893960930623,
+      "clip_passes_per_object": 40,
+      "seconds": 215.25684909999836,
+      "ms_per_object": 74.6900933726573
+    },
+    {
+      "condition": "ens_jitter",
+      "angle_deg": 60.0,
+      "accuracy": {
+        "value": 0.33553088133240805,
+        "lo": 0.31852879944483,
+        "hi": 0.3525329632199861,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.2752337959104466,
+      "clip_passes_per_object": 40,
+      "seconds": 215.44566610000038,
+      "ms_per_object": 74.7556093337961
+    },
+    {
+      "condition": "ens_jitter",
+      "angle_deg": 90.0,
+      "accuracy": {
+        "value": 0.339000693962526,
+        "lo": 0.32165163081193615,
+        "hi": 0.3563497571131159,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.2747209607444036,
+      "clip_passes_per_object": 40,
+      "seconds": 215.07658069999889,
+      "ms_per_object": 74.62754361554437
+    },
+    {
+      "condition": "canon_pca_ens",
+      "angle_deg": 0.0,
+      "accuracy": {
+        "value": 0.34975711311589175,
+        "lo": 0.3327550312283137,
+        "hi": 0.3671061762664816,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.28811722669269,
+      "clip_passes_per_object": 40,
+      "seconds": 216.1290386000037,
+      "ms_per_object": 74.99272678695479
+    },
+    {
+      "condition": "canon_pca_ens",
+      "angle_deg": 30.0,
+      "accuracy": {
+        "value": 0.3473282442748092,
+        "lo": 0.3303261623872311,
+        "hi": 0.36467730742539906,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.28696241637896164,
+      "clip_passes_per_object": 40,
+      "seconds": 216.1495036999986,
+      "ms_per_object": 74.99982779319868
+    },
+    {
+      "condition": "canon_pca_ens",
+      "angle_deg": 60.0,
+      "accuracy": {
+        "value": 0.34906315058986814,
+        "lo": 0.3324080499653019,
+        "hi": 0.366412213740458,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.28861764275212665,
+      "clip_passes_per_object": 40,
+      "seconds": 216.01619619999838,
+      "ms_per_object": 74.95357258847966
+    },
+    {
+      "condition": "canon_pca_ens",
+      "angle_deg": 90.0,
+      "accuracy": {
+        "value": 0.34975711311589175,
+        "lo": 0.3327550312283137,
+        "hi": 0.3671148507980568,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.2892754959676507,
+      "clip_passes_per_object": 40,
+      "seconds": 216.21270650000952,
+      "ms_per_object": 75.02175798057235
+    }
+  ],
+  "paired_vs_baseline": [
+    {
+      "condition": "canon_pca",
+      "angle_deg": 0.0,
+      "delta": {
+        "value": -0.015614156835530881,
+        "lo": -0.027411519777931992,
+        "hi": -0.0038081193615546022,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "verdict": "WORSE"
+    },
+    {
+      "condition": "canon_pca",
+      "angle_deg": 30.0,
+      "delta": {
+        "value": 0.00659264399722415,
+        "lo": -0.005898681471200555,
+        "hi": 0.019092643997224025,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "verdict": "no"
+    },
+    {
+      "condition": "canon_pca",
+      "angle_deg": 60.0,
+      "delta": {
+        "value": 0.0017349063150589867,
+        "lo": -0.010062456627342124,
+        "hi": 0.013879250520471894,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "verdict": "no"
+    },
+    {
+      "condition": "canon_pca",
+      "angle_deg": 90.0,
+      "delta": {
+        "value": -0.009715475364330326,
+        "lo": -0.02116585704371964,
+        "hi": 0.002081887578070784,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "verdict": "no"
+    },
+    {
+      "condition": "canon_extent",
+      "angle_deg": 0.0,
+      "delta": {
+        "value": -0.01179736294240111,
+        "lo": -0.023941707147814018,
+        "hi": 0.00034698126301179735,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "verdict": "no"
+    },
+    {
+      "condition": "canon_extent",
+      "angle_deg": 30.0,
+      "delta": {
+        "value": 0.007980569049271339,
+        "lo": -0.005204718945176961,
+        "hi": 0.021512838306731435,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "verdict": "no"
+    },
+    {
+      "condition": "canon_extent",
+      "angle_deg": 60.0,
+      "delta": {
+        "value": 0.002081887578070784,
+        "lo": -0.010409437890353921,
+        "hi": 0.014920194309507287,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "verdict": "no"
+    },
+    {
+      "condition": "canon_extent",
+      "angle_deg": 90.0,
+      "delta": {
+        "value": -0.005898681471200555,
+        "lo": -0.017696044413601664,
+        "hi": 0.006245662734212352,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "verdict": "no"
+    },
+    {
+      "condition": "ens_yaw",
+      "angle_deg": 0.0,
+      "delta": {
+        "value": -0.004510756419153366,
+        "lo": -0.014226231783483692,
+        "hi": 0.005551700208188758,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "verdict": "no"
+    },
+    {
+      "condition": "ens_yaw",
+      "angle_deg": 30.0,
+      "delta": {
+        "value": 0.015614156835530881,
+        "lo": 0.005898681471200555,
+        "hi": 0.025676613462873005,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "verdict": "better"
+    },
+    {
+      "condition": "ens_yaw",
+      "angle_deg": 60.0,
+      "delta": {
+        "value": 0.009021512838306732,
+        "lo": 0.0,
+        "hi": 0.01839000693962526,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "verdict": "no"
+    },
+    {
+      "condition": "ens_yaw",
+      "angle_deg": 90.0,
+      "delta": {
+        "value": -0.0024288688410825814,
+        "lo": -0.012491325468424705,
+        "hi": 0.007633587786259542,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "verdict": "no"
+    },
+    {
+      "condition": "ens_jitter",
+      "angle_deg": 0.0,
+      "delta": {
+        "value": -0.014226231783483692,
+        "lo": -0.02359472588480222,
+        "hi": -0.004857737682165163,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "verdict": "WORSE"
+    },
+    {
+      "condition": "ens_jitter",
+      "angle_deg": 30.0,
+      "delta": {
+        "value": -0.0024288688410825814,
+        "lo": -0.011450381679389313,
+        "hi": 0.00659264399722415,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "verdict": "no"
+    },
+    {
+      "condition": "ens_jitter",
+      "angle_deg": 60.0,
+      "delta": {
+        "value": -0.003122831367106176,
+        "lo": -0.012144344205412909,
+        "hi": 0.005898681471200555,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "verdict": "no"
+    },
+    {
+      "condition": "ens_jitter",
+      "angle_deg": 90.0,
+      "delta": {
+        "value": -0.010062456627342124,
+        "lo": -0.01977793199167245,
+        "hi": -0.00034698126301179735,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "verdict": "WORSE"
+    },
+    {
+      "condition": "canon_pca_ens",
+      "angle_deg": 0.0,
+      "delta": {
+        "value": -0.006245662734212352,
+        "lo": -0.017002081887578072,
+        "hi": 0.004510756419153366,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "verdict": "no"
+    },
+    {
+      "condition": "canon_pca_ens",
+      "angle_deg": 30.0,
+      "delta": {
+        "value": 0.012144344205412909,
+        "lo": 0.0013879250520471894,
+        "hi": 0.023247744621790422,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "verdict": "better"
+    },
+    {
+      "condition": "canon_pca_ens",
+      "angle_deg": 60.0,
+      "delta": {
+        "value": 0.010409437890353921,
+        "lo": 0.0,
+        "hi": 0.020818875780707843,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "verdict": "no"
+    },
+    {
+      "condition": "canon_pca_ens",
+      "angle_deg": 90.0,
+      "delta": {
+        "value": 0.0006939625260235947,
+        "lo": -0.010409437890353921,
+        "hi": 0.012144344205412909,
+        "n": 2882,
+        "confidence": 0.95
+      },
+      "verdict": "no"
+    }
+  ],
+  "peak_vram_gb": 1.1091647148132324
+}

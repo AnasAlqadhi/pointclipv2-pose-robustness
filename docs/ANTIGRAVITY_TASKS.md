@@ -303,7 +303,7 @@ at 0/90/180/270 and at 45/135/225/315, so their union has 45 degree spacing.
 `SETUP.md`). The GitHub repository is the primary offsite copy and OneDrive is the second. Run the script
 after each batch of results.
 
-## [~] A9 - ScanObjectNN (started 2026-11-12)
+## [x] A9 - ScanObjectNN - DONE 2026-11-12 (predictions 2 and 3 refuted; see REPRO_LOG runs 14-16)
 
 **Licence first.** These runs use the second-hand copy that arrived in the upstream authors' Drive folder.
 Anas must register on the official ScanObjectNN site and accept its terms **before any number from these
