@@ -266,6 +266,39 @@ appearance. RN101's prompts give the flattest curve and also the worst reproduct
 but not evidence. Testing it would mean running one backbone's prompts through another backbone - a clean
 experiment, not yet run, and a good "unresolved question" for the report.
 
+| 18 | 2026-11-12 | A10 follow-up | diagnosis of the RN101 shortfall - **no re-run, code inspection only** | `clip.build_model` dims; `configs/trainers/PointCLIPV2_ZS/*.yaml`; `trainers/post_search.py` | - | **not a channel-width bug.** Measured embedding dimensions are RN50 1024, RN101 512, ViT-B/32 512, ViT-B/16 512 - exactly what our pipeline assumes | see below |
+
+### The RN101 shortfall: diagnosed, and it sharpens the central criticism
+
+The first suspect was the channel width. It is wrong: the four backbones' real embedding dimensions match
+ours exactly. The four trainer configs are also identical apart from batch size and worker count, neither
+of which changes a result.
+
+The explanation is elsewhere, and it matters for the whole report. **Our runs use the shipped
+`best_param.py` prompts and weights and stop there. The published numbers additionally run
+`--post-search`, which searches again at evaluation time.** Look at the scope of that search
+(`trainers/post_search.py`, lines 100-122): for each of 2 passes, for each of 40 classes, for each of
+**~1,198 candidate prompts** from `prompts/modelnet40_1000.json`, it swaps the prompt in, recomputes
+accuracy **against the test labels**, and keeps the swap if accuracy improved. That is on the order of
+**96,000 greedy accept-or-reject decisions taken against the test set**, starting from prompts that were
+themselves already selected that way. A separate loop does the same for the ten view weights.
+
+Our four measurements sit at or just below the published figures, by 0.12 (RN50), 2.27 (RN101), 0.28
+(ViT-B/32) and 0.65 (ViT-B/16) points. That pattern is what the explanation predicts: we are measuring the
+**pre-search starting point**, and the published figure is the **post-search endpoint**. RN101 is simply
+the backbone where the extra hill-climbing bought the most.
+
+**Revision to row 17.** It called RN101 an unexplained shortfall with a channel-width suspicion. The
+channel width is now ruled out and the likely cause named. It is still not *proved*: proving it means
+re-running the search and seeing RN101 climb to about 46.3.
+
+**The experiment that would settle it, not yet run.** Re-implement the greedy prompt search on cached
+features. Only one class's text vector changes per step, so each step is a rank-one update to the logits
+and the whole 96,000-step search is cheap. Two numbers would come out of it: whether RN101 reaches its
+published figure, and - more valuable for the report - **how many accuracy points the evaluation-time
+search is worth on each backbone**. That is the quantity the central criticism currently describes
+qualitatively.
+
 | 4 | 2026-11-12 | - | ModelNet40, first 64 objects only | `configs/smoke_modelnet40.yaml` | 0 | 56.25% - **not reportable** | Smoke test of the harness. The test split is ordered by class, so the first 64 objects are not a sample of anything |
 
 Columns to fill without exception: the script and config that produced it, the repo commit it ran at, the
