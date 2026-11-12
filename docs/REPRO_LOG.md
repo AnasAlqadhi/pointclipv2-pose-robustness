@@ -93,6 +93,37 @@ Paired against the baseline at the same angle: bbox canonicalisation **+4.94** [
    showed is already pose-flat, no condition improves anything at any angle. A fix that "helped" there
    would have meant the gain was an artefact of the procedure rather than a repair of the pathology.
 
+| 10 | 2026-11-12 | A8.1 | ModelNet40 yaw sweep, **searched prompts + uniform weights** | `configs/yaw_sweep_modelnet40_prompts_only.yaml` | 0 | 0 deg 61.10%, spread **6.93 pts**, peaks again at 0/90/180/270 | part of the factorial below |
+| 11 | 2026-11-12 | A8.1 | ModelNet40 yaw sweep, **template prompt + searched weights** | `configs/yaw_sweep_modelnet40_weights_only.yaml` | 0 | 0 deg 33.02%, spread **2.31 pts** | part of the factorial below |
+
+### The 2x2 factorial - my prediction was wrong
+
+| | searched weights | uniform weights |
+|---|---|---|
+| **searched prompts** | 63.61%, spread **9.16** | 61.10%, spread **6.93** |
+| **template prompt** | 33.02%, spread **2.31** | 32.50%, spread **1.54** |
+
+**The prediction, recorded in `ANTIGRAVITY_TASKS.md` before these runs, was that the searched *weights*
+carry the pose sensitivity and the prompts carry the accuracy.** The reasoning was that weights are indexed
+by viewpoint and prompts are not. The accuracy half is right - prompts are worth about 30 points, weights
+about 1 to 2. The pose half is **wrong**: the sensitivity follows the **prompts**. With uniform weights and
+searched prompts the spread is still 6.93 points, while with a template prompt it is 1.5 to 2.3 points
+whatever the weights do. The weights add roughly 2.2 extra points of spread on top (9.16 against 6.93), so
+they contribute, but they are not the cause.
+
+**A better explanation, and it is more interesting than the prediction was.** The searched prompts are not
+pose-neutral descriptions. Read them in `trainers/best_param.py`: "a side view depth map of a bed looks
+like a rectangle with a smaller rectangle on top of it", "the chair would be a dark object on the grayscale
+map", "a depth map of a cone would look like a cone shaped object". They describe what the object looks
+like **from the canonical viewpoints, in the canonical pose**. They were selected on exactly those renders.
+Rotate the object and the description stops matching the image. So the fragility is not in a weighting
+vector; it is baked into the language that was tuned against canonically posed depth maps.
+
+Do not quietly replace the old prediction with this one in the report. State the prediction, state that it
+was refuted, and give this account as the revised explanation - with the caveat that it is an explanation
+the data is consistent with, not one the data proves. A direct test would be to write pose-neutral prompts
+by hand and check whether accuracy survives rotation better; that is the obvious next experiment.
+
 | 4 | 2026-11-12 | - | ModelNet40, first 64 objects only | `configs/smoke_modelnet40.yaml` | 0 | 56.25% - **not reportable** | Smoke test of the harness. The test split is ordered by class, so the first 64 objects are not a sample of anything |
 
 Columns to fill without exception: the script and config that produced it, the repo commit it ran at, the
