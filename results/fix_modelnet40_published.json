@@ -1,0 +1,684 @@
+{
+  "name": "fix_modelnet40_published",
+  "config": {
+    "name": "fix_modelnet40_published",
+    "dataset": "modelnet40",
+    "data_root": "data/modelnet40_ply_hdf5_2048",
+    "split": "test",
+    "backbone": "ViT-B/16",
+    "protocol": "published",
+    "num_points": 1024,
+    "batch_size": 16,
+    "seed": 0,
+    "ensemble_k": 4,
+    "ensemble_span_deg": 45,
+    "angles": [
+      0,
+      30,
+      60,
+      90
+    ],
+    "conditions": [
+      "baseline",
+      "canon_pca",
+      "canon_extent",
+      "ens_yaw",
+      "ens_jitter",
+      "canon_pca_ens"
+    ]
+  },
+  "commit": "7d0279c3e391bcb397c6ae08703bb05801dbf191",
+  "up_axis": 1,
+  "protocol": "published",
+  "ensemble_k": 4,
+  "ensemble_span_deg": 45.0,
+  "n_objects": 2468,
+  "seed": 0,
+  "classnames": [
+    "airplane",
+    "bathtub",
+    "bed",
+    "bench",
+    "bookshelf",
+    "bottle",
+    "bowl",
+    "car",
+    "chair",
+    "cone",
+    "cup",
+    "curtain",
+    "desk",
+    "door",
+    "dresser",
+    "flower_pot",
+    "glass_box",
+    "guitar",
+    "keyboard",
+    "lamp",
+    "laptop",
+    "mantel",
+    "monitor",
+    "night_stand",
+    "person",
+    "piano",
+    "plant",
+    "radio",
+    "range_hood",
+    "sink",
+    "sofa",
+    "stairs",
+    "stool",
+    "table",
+    "tent",
+    "toilet",
+    "tv_stand",
+    "vase",
+    "wardrobe",
+    "xbox"
+  ],
+  "rows": [
+    {
+      "condition": "baseline",
+      "angle_deg": 0.0,
+      "accuracy": {
+        "value": 0.6361426256077796,
+        "lo": 0.6170887358184767,
+        "hi": 0.6551863857374393,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.5580697674418604,
+      "clip_passes_per_object": 10,
+      "seconds": 46.92560619999858,
+      "ms_per_object": 19.013616774715796
+    },
+    {
+      "condition": "baseline",
+      "angle_deg": 30.0,
+      "accuracy": {
+        "value": 0.557131280388979,
+        "lo": 0.5376823338735819,
+        "hi": 0.576580226904376,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.49205813953488386,
+      "clip_passes_per_object": 10,
+      "seconds": 46.03944980000233,
+      "ms_per_object": 18.654558265803214
+    },
+    {
+      "condition": "baseline",
+      "angle_deg": 60.0,
+      "accuracy": {
+        "value": 0.5547001620745543,
+        "lo": 0.5348460291734197,
+        "hi": 0.5741491085899514,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.4950116279069768,
+      "clip_passes_per_object": 10,
+      "seconds": 46.09534050000366,
+      "ms_per_object": 18.677204416533087
+    },
+    {
+      "condition": "baseline",
+      "angle_deg": 90.0,
+      "accuracy": {
+        "value": 0.5996758508914101,
+        "lo": 0.5798217179902755,
+        "hi": 0.6187196110210696,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.5400348837209302,
+      "clip_passes_per_object": 10,
+      "seconds": 46.13561070000287,
+      "ms_per_object": 18.693521353323693
+    },
+    {
+      "condition": "canon_pca",
+      "angle_deg": 0.0,
+      "accuracy": {
+        "value": 0.593192868719611,
+        "lo": 0.5737439222042139,
+        "hi": 0.6122366288492707,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.5260813953488372,
+      "clip_passes_per_object": 10,
+      "seconds": 46.36660269999993,
+      "ms_per_object": 18.787116166936762
+    },
+    {
+      "condition": "canon_pca",
+      "angle_deg": 30.0,
+      "accuracy": {
+        "value": 0.5935980551053485,
+        "lo": 0.5741491085899514,
+        "hi": 0.6126418152350082,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.5222906976744186,
+      "clip_passes_per_object": 10,
+      "seconds": 46.44368370000302,
+      "ms_per_object": 18.818348338737042
+    },
+    {
+      "condition": "canon_pca",
+      "angle_deg": 60.0,
+      "accuracy": {
+        "value": 0.5948136142625607,
+        "lo": 0.5753646677471637,
+        "hi": 0.6138573743922204,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.525,
+      "clip_passes_per_object": 10,
+      "seconds": 46.46843850000005,
+      "ms_per_object": 18.82837864667749
+    },
+    {
+      "condition": "canon_pca",
+      "angle_deg": 90.0,
+      "accuracy": {
+        "value": 0.5940032414910859,
+        "lo": 0.5745542949756888,
+        "hi": 0.6130470016207455,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.5262906976744185,
+      "clip_passes_per_object": 10,
+      "seconds": 46.451652900002955,
+      "ms_per_object": 18.821577350082233
+    },
+    {
+      "condition": "canon_extent",
+      "angle_deg": 0.0,
+      "accuracy": {
+        "value": 0.6065640194489466,
+        "lo": 0.5871150729335495,
+        "hi": 0.6256077795786061,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.5376220930232558,
+      "clip_passes_per_object": 10,
+      "seconds": 49.46720880000066,
+      "ms_per_object": 20.043439546191518
+    },
+    {
+      "condition": "canon_extent",
+      "angle_deg": 30.0,
+      "accuracy": {
+        "value": 0.6065640194489466,
+        "lo": 0.5871150729335495,
+        "hi": 0.6256077795786061,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.5385406976744186,
+      "clip_passes_per_object": 10,
+      "seconds": 50.13300470000104,
+      "ms_per_object": 20.313210980551474
+    },
+    {
+      "condition": "canon_extent",
+      "angle_deg": 60.0,
+      "accuracy": {
+        "value": 0.6057536466774717,
+        "lo": 0.5858995137763371,
+        "hi": 0.6247974068071313,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.5371220930232558,
+      "clip_passes_per_object": 10,
+      "seconds": 50.13018340000417,
+      "ms_per_object": 20.31206782820266
+    },
+    {
+      "condition": "canon_extent",
+      "angle_deg": 90.0,
+      "accuracy": {
+        "value": 0.6073743922204214,
+        "lo": 0.5883205024311184,
+        "hi": 0.626418152350081,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.5397848837209303,
+      "clip_passes_per_object": 10,
+      "seconds": 49.9636157000059,
+      "ms_per_object": 20.244576863859766
+    },
+    {
+      "condition": "ens_yaw",
+      "angle_deg": 0.0,
+      "accuracy": {
+        "value": 0.5911669367909238,
+        "lo": 0.5717179902755267,
+        "hi": 0.6106158833063209,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.5197093023255814,
+      "clip_passes_per_object": 40,
+      "seconds": 184.66230519999954,
+      "ms_per_object": 74.82265202593175
+    },
+    {
+      "condition": "ens_yaw",
+      "angle_deg": 30.0,
+      "accuracy": {
+        "value": 0.5777957860615883,
+        "lo": 0.5583468395461912,
+        "hi": 0.5972447325769854,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.5137151162790697,
+      "clip_passes_per_object": 40,
+      "seconds": 184.8032105999955,
+      "ms_per_object": 74.879744975687
+    },
+    {
+      "condition": "ens_yaw",
+      "angle_deg": 60.0,
+      "accuracy": {
+        "value": 0.5794165316045381,
+        "lo": 0.559967585089141,
+        "hi": 0.5988654781199352,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.5168720930232558,
+      "clip_passes_per_object": 40,
+      "seconds": 184.73713839999982,
+      "ms_per_object": 74.85297341977302
+    },
+    {
+      "condition": "ens_yaw",
+      "angle_deg": 90.0,
+      "accuracy": {
+        "value": 0.5883306320907618,
+        "lo": 0.5688816855753647,
+        "hi": 0.6073743922204214,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.5183313953488373,
+      "clip_passes_per_object": 40,
+      "seconds": 184.68320680000033,
+      "ms_per_object": 74.83112106969219
+    },
+    {
+      "condition": "ens_jitter",
+      "angle_deg": 0.0,
+      "accuracy": {
+        "value": 0.6146677471636953,
+        "lo": 0.5952188006482982,
+        "hi": 0.6337115072933549,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.5341860465116279,
+      "clip_passes_per_object": 40,
+      "seconds": 184.4805481000003,
+      "ms_per_object": 74.74900652350094
+    },
+    {
+      "condition": "ens_jitter",
+      "angle_deg": 30.0,
+      "accuracy": {
+        "value": 0.5530794165316045,
+        "lo": 0.5336304700162074,
+        "hi": 0.5725283630470016,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.48530813953488366,
+      "clip_passes_per_object": 40,
+      "seconds": 184.5370388999945,
+      "ms_per_object": 74.771895826578
+    },
+    {
+      "condition": "ens_jitter",
+      "angle_deg": 60.0,
+      "accuracy": {
+        "value": 0.557131280388979,
+        "lo": 0.5376823338735819,
+        "hi": 0.576580226904376,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.49404651162790697,
+      "clip_passes_per_object": 40,
+      "seconds": 184.82860239999718,
+      "ms_per_object": 74.89003338735704
+    },
+    {
+      "condition": "ens_jitter",
+      "angle_deg": 90.0,
+      "accuracy": {
+        "value": 0.5923824959481362,
+        "lo": 0.5725283630470016,
+        "hi": 0.6114262560777958,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.5279883720930233,
+      "clip_passes_per_object": 40,
+      "seconds": 184.9568842000008,
+      "ms_per_object": 74.9420114262564
+    },
+    {
+      "condition": "canon_pca_ens",
+      "angle_deg": 0.0,
+      "accuracy": {
+        "value": 0.5790113452188006,
+        "lo": 0.5595522690437602,
+        "hi": 0.5984602917341977,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.5103720930232558,
+      "clip_passes_per_object": 40,
+      "seconds": 185.6631641999993,
+      "ms_per_object": 75.22818646677443
+    },
+    {
+      "condition": "canon_pca_ens",
+      "angle_deg": 30.0,
+      "accuracy": {
+        "value": 0.5806320907617504,
+        "lo": 0.5611831442463533,
+        "hi": 0.6000810372771475,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.5123720930232558,
+      "clip_passes_per_object": 40,
+      "seconds": 185.79552590000094,
+      "ms_per_object": 75.28181762560816
+    },
+    {
+      "condition": "canon_pca_ens",
+      "angle_deg": 60.0,
+      "accuracy": {
+        "value": 0.5806320907617504,
+        "lo": 0.5611831442463533,
+        "hi": 0.6000810372771475,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.5124127906976744,
+      "clip_passes_per_object": 40,
+      "seconds": 185.66668400000344,
+      "ms_per_object": 75.22961264181663
+    },
+    {
+      "condition": "canon_pca_ens",
+      "angle_deg": 90.0,
+      "accuracy": {
+        "value": 0.583063209076175,
+        "lo": 0.563614262560778,
+        "hi": 0.6025121555915721,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "macro_accuracy": 0.5152848837209302,
+      "clip_passes_per_object": 40,
+      "seconds": 185.46292740000354,
+      "ms_per_object": 75.14705324149251
+    }
+  ],
+  "paired_vs_baseline": [
+    {
+      "condition": "canon_pca",
+      "angle_deg": 0.0,
+      "delta": {
+        "value": -0.04294975688816856,
+        "lo": -0.05429497568881685,
+        "hi": -0.03119935170178282,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "verdict": "WORSE"
+    },
+    {
+      "condition": "canon_pca",
+      "angle_deg": 30.0,
+      "delta": {
+        "value": 0.03646677471636953,
+        "lo": 0.02025931928687196,
+        "hi": 0.053079416531604535,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "verdict": "better"
+    },
+    {
+      "condition": "canon_pca",
+      "angle_deg": 60.0,
+      "delta": {
+        "value": 0.040113452188006486,
+        "lo": 0.023905996758508914,
+        "hi": 0.055915721231766614,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "verdict": "better"
+    },
+    {
+      "condition": "canon_pca",
+      "angle_deg": 90.0,
+      "delta": {
+        "value": -0.005672609400324149,
+        "lo": -0.01661264181523501,
+        "hi": 0.005672609400324149,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "verdict": "no"
+    },
+    {
+      "condition": "canon_extent",
+      "angle_deg": 0.0,
+      "delta": {
+        "value": -0.02957860615883306,
+        "lo": -0.039303079416531606,
+        "hi": -0.02025931928687196,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "verdict": "WORSE"
+    },
+    {
+      "condition": "canon_extent",
+      "angle_deg": 30.0,
+      "delta": {
+        "value": 0.04943273905996758,
+        "lo": 0.03322528363047002,
+        "hi": 0.06564019448946515,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "verdict": "better"
+    },
+    {
+      "condition": "canon_extent",
+      "angle_deg": 60.0,
+      "delta": {
+        "value": 0.051053484602917344,
+        "lo": 0.03484602917341977,
+        "hi": 0.06685575364667747,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "verdict": "better"
+    },
+    {
+      "condition": "canon_extent",
+      "angle_deg": 90.0,
+      "delta": {
+        "value": 0.007698541329011345,
+        "lo": -0.0008103727714748784,
+        "hi": 0.01620745542949757,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "verdict": "no"
+    },
+    {
+      "condition": "ens_yaw",
+      "angle_deg": 0.0,
+      "delta": {
+        "value": -0.044975688816855756,
+        "lo": -0.05834683954619125,
+        "hi": -0.0320097244732577,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "verdict": "WORSE"
+    },
+    {
+      "condition": "ens_yaw",
+      "angle_deg": 30.0,
+      "delta": {
+        "value": 0.020664505672609402,
+        "lo": 0.011750405186385737,
+        "hi": 0.029983792544570502,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "verdict": "better"
+    },
+    {
+      "condition": "ens_yaw",
+      "angle_deg": 60.0,
+      "delta": {
+        "value": 0.02471636952998379,
+        "lo": 0.014991896272285251,
+        "hi": 0.03484602917341977,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "verdict": "better"
+    },
+    {
+      "condition": "ens_yaw",
+      "angle_deg": 90.0,
+      "delta": {
+        "value": -0.011345218800648298,
+        "lo": -0.025121555915721232,
+        "hi": 0.0024311183144246355,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "verdict": "no"
+    },
+    {
+      "condition": "ens_jitter",
+      "angle_deg": 0.0,
+      "delta": {
+        "value": -0.02147487844408428,
+        "lo": -0.03322528363047002,
+        "hi": -0.009724473257698542,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "verdict": "WORSE"
+    },
+    {
+      "condition": "ens_jitter",
+      "angle_deg": 30.0,
+      "delta": {
+        "value": -0.004051863857374392,
+        "lo": -0.012965964343598054,
+        "hi": 0.004862236628849271,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "verdict": "no"
+    },
+    {
+      "condition": "ens_jitter",
+      "angle_deg": 60.0,
+      "delta": {
+        "value": 0.0024311183144246355,
+        "lo": -0.006888168557536467,
+        "hi": 0.011750405186385737,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "verdict": "no"
+    },
+    {
+      "condition": "ens_jitter",
+      "angle_deg": 90.0,
+      "delta": {
+        "value": -0.007293354943273906,
+        "lo": -0.01985413290113452,
+        "hi": 0.00526742301458671,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "verdict": "no"
+    },
+    {
+      "condition": "canon_pca_ens",
+      "angle_deg": 0.0,
+      "delta": {
+        "value": -0.05713128038897893,
+        "lo": -0.07090761750405186,
+        "hi": -0.043354943273905995,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "verdict": "WORSE"
+    },
+    {
+      "condition": "canon_pca_ens",
+      "angle_deg": 30.0,
+      "delta": {
+        "value": 0.023500810372771474,
+        "lo": 0.012155591572123177,
+        "hi": 0.03525121555915721,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "verdict": "better"
+    },
+    {
+      "condition": "canon_pca_ens",
+      "angle_deg": 60.0,
+      "delta": {
+        "value": 0.02593192868719611,
+        "lo": 0.014586709886547812,
+        "hi": 0.03768233387358185,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "verdict": "better"
+    },
+    {
+      "condition": "canon_pca_ens",
+      "angle_deg": 90.0,
+      "delta": {
+        "value": -0.01661264181523501,
+        "lo": -0.03079416531604538,
+        "hi": -0.0028363047001620746,
+        "n": 2468,
+        "confidence": 0.95
+      },
+      "verdict": "WORSE"
+    }
+  ],
+  "peak_vram_gb": 1.109403133392334
+}

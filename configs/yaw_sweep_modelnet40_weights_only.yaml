@@ -1,0 +1,13 @@
+# Claims C2 and C3: accuracy as a function of object yaw, rotation applied to
+# the cloud before projection. Up axis = +Y, established in
+# results/figures/up_axis_check.png (scripts/check_up_axis.py).
+name: yaw_sweep_modelnet40_weights_only
+dataset: modelnet40
+data_root: data/modelnet40_ply_hdf5_2048
+split: test
+backbone: ViT-B/16
+protocol: weights_only
+num_points: 1024
+batch_size: 16
+step_deg: 30
+seed: 0

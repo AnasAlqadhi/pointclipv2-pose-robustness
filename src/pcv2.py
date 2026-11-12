@@ -39,6 +39,23 @@ import torch
 PROTOCOL_PUBLISHED = "published"  # searched prompts + searched view weights (as shipped)
 PROTOCOL_PLAIN = "plain"  # fixed template prompt + uniform view weights
 
+# The 2x2 factorial. "published" and "plain" are two opposite corners of it; the
+# other two corners separate which half of the test-set tuning does what. The
+# question they answer: the searched *weights* are indexed by viewpoint while
+# the searched *prompts* are not, so the hypothesis - recorded before the runs -
+# is that the weights carry the pose sensitivity and the prompts carry the
+# accuracy.
+PROTOCOL_PROMPTS_ONLY = "prompts_only"  # searched prompts + uniform weights
+PROTOCOL_WEIGHTS_ONLY = "weights_only"  # template prompt + searched weights
+
+PROTOCOLS = {
+    #                      searched prompts, searched weights
+    PROTOCOL_PUBLISHED: (True, True),
+    PROTOCOL_PLAIN: (False, False),
+    PROTOCOL_PROMPTS_ONLY: (True, False),
+    PROTOCOL_WEIGHTS_ONLY: (False, True),
+}
+
 # Used for PROTOCOL_PLAIN. Fixed a priori, before seeing any result, and never
 # tuned: the renders are depth maps, so this is the honest neutral description.
 PLAIN_TEMPLATE = "a depth map of a {}."
@@ -133,14 +150,19 @@ def build_pipeline(
     projection = Realistic_Projection()
     num_views = projection.num_views
 
-    if protocol == PROTOCOL_PUBLISHED:
+    if protocol not in PROTOCOLS:
+        raise ValueError(f"unknown protocol {protocol!r}; expected one of {sorted(PROTOCOLS)}")
+    searched_prompts, searched_weights = PROTOCOLS[protocol]
+
+    if searched_prompts:
         prompts = list(best_prompt_weight[f"{dataset}_{name2}_test_prompts"])
-        weights = torch.tensor(best_prompt_weight[f"{dataset}_{name2}_test_weights"]).float().cuda()
-    elif protocol == PROTOCOL_PLAIN:
-        prompts = [PLAIN_TEMPLATE.format(name.replace("_", " ")) for name in classnames]
-        weights = torch.ones(num_views).float().cuda()
     else:
-        raise ValueError(f"unknown protocol {protocol!r}")
+        prompts = [PLAIN_TEMPLATE.format(name.replace("_", " ")) for name in classnames]
+
+    if searched_weights:
+        weights = torch.tensor(best_prompt_weight[f"{dataset}_{name2}_test_weights"]).float().cuda()
+    else:
+        weights = torch.ones(num_views).float().cuda()
 
     if len(prompts) != len(classnames):
         raise ValueError(f"{len(prompts)} prompts for {len(classnames)} classes")
