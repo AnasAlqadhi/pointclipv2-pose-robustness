@@ -73,6 +73,8 @@ Disclosed as the course requires, in `../AI_USE.md`.
 | continue this work anywhere (the full plan) | **`docs/WORK_PLAN.md`** |
 | know what is left before submission | `docs/FINISH_LINE.md` |
 | write the report | `docs/REPORT_DRAFT.md` (sections 1, 3-7 written; 2 and 8 are Anas's) |
+| write section 8 and check the numbers | **`docs/HOW_TO_WRITE_S8_AND_VERIFY.md`** |
+| look up any reportable number | `docs/NUMBERS.md` (generated; re-run `scripts/collect_numbers.py`) |
 | read the five papers | `docs/LITERATURE.md` |
 | build the slides | `docs/PRESENTATION.md` |
 | check where a number came from | `docs/REPRO_LOG.md` (append-only, 19 runs) |
