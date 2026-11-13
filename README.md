@@ -79,3 +79,4 @@ Disclosed as the course requires, in `../AI_USE.md`.
 | build the slides | `docs/PRESENTATION.md` |
 | check where a number came from | `docs/REPRO_LOG.md` (append-only, 19 runs) |
 | continue this with any AI model | `AGENTS.md`, then `docs/ANTIGRAVITY_TASKS.md` |
+| hand a task to Antigravity | **`docs/ANTIGRAVITY_PROMPTS.md`** (ready to paste) |
